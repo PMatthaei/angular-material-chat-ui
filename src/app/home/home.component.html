@@ -1,0 +1,32 @@
+<h1>Welcome to BTBX Chat</h1>
+
+<div class="login">
+  <div *ngIf=" auth.user$ | async as user; else login">
+    <img [src]="user.photoURL" width="50px">
+    <p>
+      <span class="tag is-dark">{{ user.displayName }}</span>
+      <span class="tag is-light">{{ user.uid }}</span>
+    </p>
+
+
+    <button class="btn btn-primary" (click)="auth.signOut()">Sign Out</button>
+    <hr>
+
+    <button class="btn btn-primary" (click)="cs.create()">Create New Chat</button>
+
+    <hr>
+
+    <h3>Chatrooms</h3>
+
+    <ul>
+      <li *ngFor="let chat of userChats$ | async">
+        <a class="btn btn-primary" style="margin: 8px" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #login>
+    <button class="btn btn-primary" (click)="auth.googleSignIn()">Login with Google</button>
+  </ng-template>
+
+</div>
