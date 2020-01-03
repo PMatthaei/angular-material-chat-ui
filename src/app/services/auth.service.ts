@@ -8,8 +8,8 @@ import {
   AngularFirestoreDocument
 } from '@angular/fire/firestore';
 
-import { Observable, of } from 'rxjs';
-import { switchMap, first, map } from 'rxjs/operators';
+import { Observable, of, combineLatest } from 'rxjs';
+import { switchMap, first, map, catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -23,7 +23,11 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          return this.afs.doc<any>(`users/${user.uid}`).valueChanges();
+          const publicUserData = this.afs.doc(`users/${user.uid}`).valueChanges();
+          const secureUserData = this.afs.doc(`users/${user.uid}`).collection('secureData').valueChanges().pipe(catchError(err => of({})));
+          return combineLatest(publicUserData, secureUserData)
+            .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
+          //return this.afs.doc<any>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }
@@ -33,10 +37,6 @@ export class AuthService {
 
   getUser() {
     return this.user$.pipe(first()).toPromise();
-  }
-
-  getUser2() {
-    return this.user$.pipe(first());
   }
 
   googleSignIn() {

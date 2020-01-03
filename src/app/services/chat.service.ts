@@ -41,7 +41,7 @@ export class ChatService {
     return this.auth.user$.pipe(
       switchMap(user => {
         return this.afs
-          .collection('chats', ref => ref.where('ownerId', '==', user.uid))
+          .collection('chats', ref => ref.where('participants', 'array-contains', user.uid))
           .snapshotChanges()
           .pipe(
             map(actions => {
@@ -62,10 +62,12 @@ export class ChatService {
 
     // Init new chat data
     const data = {
-      uid,
       createdAt: Date.now(),
       count: 0,
-      messages: []
+      messages: [],
+      participants: [],
+      ownerId: uid,
+      typing: []
     };
 
     // Add new chat data to firestore and wait for result

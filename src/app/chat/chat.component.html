@@ -24,7 +24,7 @@
 
     <div class="form container">
       <ng-container *ngFor="let typerId of chat.typing">
-        <p *ngIf="typerId !== user.uid">{{ getUserById(typerId) }} is typing</p>
+        <p *ngIf="typerId !== user.uid">{{ getUserById(typerId) }} is typing ...</p>
       </ng-container>
       <div class="row">
         <input class="form-control col" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit(chat.id)"

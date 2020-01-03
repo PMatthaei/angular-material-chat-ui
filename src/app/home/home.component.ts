@@ -14,4 +14,8 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.userChats$ = this.cs.getUserChats();
   }
+
+  getUserName(user) {
+    return user.realName ? user.realName : user.name;
+  }
 }
