@@ -40,9 +40,9 @@ export class ChatService {
   getUserChats() {
     return this.auth.user$.pipe(
       switchMap(user => {
-        return this.afs
-          .collection('chats', ref => ref.where('participants', 'array-contains', user.uid))
-          .snapshotChanges()
+        const participatingChats = this.afs.collection('chats', ref => ref.where('participants', 'array-contains', user.uid)).snapshotChanges();
+        const owningChats = this.afs.collection('chats', ref => ref.where('ownerId', '==', user.uid)).snapshotChanges();
+        return merge(participatingChats, owningChats)
           .pipe(
             map(actions => {
               return actions.map(a => {
@@ -159,11 +159,11 @@ export class ChatService {
       const publicUserData = this.afs.doc(`users/${uid}`).valueChanges();
       const secureUserData = this.afs.doc(`users/${uid}`).collection('secureData').valueChanges().pipe(catchError(err => of({})));
       return combineLatest(publicUserData, secureUserData)
-      .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
+        .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
     })
   }
 
-  getUserById(typerId){
+  getUserById(typerId) {
     return this.userDictionary[typerId]
   }
 }
