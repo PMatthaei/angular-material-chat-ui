@@ -26,7 +26,7 @@ export class ChatComponent implements OnInit {
   ngOnInit() {
     const chatId = this.route.snapshot.paramMap.get('id');
     const source = this.cs.get(chatId);
-    this.chat$ = this.cs.joinUsers(source).pipe(tap(v => this.scrollBottom()));
+    this.chat$ = this.cs.buildChat(source).pipe(tap(v => this.scrollBottom()));
     this.scrollBottom();
 
     this.isTyping.asObservable().pipe(filter(data => data != ''), throttleTime(1400)).subscribe((data) => {

@@ -10,7 +10,7 @@
     </div>
 
     <div #chatBox class="container">
-      <div class="card"  [class.text-right]="msg.uid !== user.uid" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
+      <div class="card" [class.text-right]="msg.uid !== user.uid" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
         <div class="card-body">
           <img [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
           <h5 class="card-title">{{ getUserName(msg.user) }}</h5>

@@ -41,14 +41,14 @@ export class ChatService {
     return this.auth.user$.pipe(
       switchMap(user => {
         const participatingChats = this.afs.collection('chats', ref => ref.where('participants', 'array-contains', user.uid)).snapshotChanges();
-        const owningChats = this.afs.collection('chats', ref => ref.where('ownerId', '==', user.uid)).snapshotChanges();
-        return merge(participatingChats, owningChats)
+        const ownedChats = this.afs.collection('chats', ref => ref.where('ownerId', '==', user.uid)).snapshotChanges();
+        return merge(participatingChats, ownedChats)
           .pipe(
             map(actions => {
               return actions.map(a => {
-                const data: Object = a.payload.doc.data();
+                const chatData: Object = a.payload.doc.data();
                 const id = a.payload.doc.id;
-                return { id, ...data };
+                return { id, ...chatData };
               });
             })
           );
@@ -128,7 +128,7 @@ export class ChatService {
     }
   }
 
-  joinUsers(chat$: Observable<any>) {
+  buildChat(chat$: Observable<any>) {
     let chat: any;
 
     return chat$.pipe(
