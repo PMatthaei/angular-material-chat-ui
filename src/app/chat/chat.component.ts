@@ -38,6 +38,10 @@ export class ChatComponent implements OnInit {
     });
   }
 
+  getUserById(typerId){
+   return this.getUserName(this.cs.getUserById(typerId))
+  }
+
   getCreatedDate(msg) {
     return new Date(msg.createdAt)
   }

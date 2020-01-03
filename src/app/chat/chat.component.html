@@ -3,7 +3,7 @@
     <div class="container">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item" routerLink="/" ><a href="#">Back</a></li>
+          <li class="breadcrumb-item" routerLink="/"><a href="#">Back</a></li>
           <li class="breadcrumb-item" aria-current="page"><a>Asset Chat - {{ chat.id }}</a></li>
         </ol>
       </nav>
@@ -23,9 +23,12 @@
     </div>
 
     <div class="form container">
-      <ng-container *ngFor="let typer of chat.typing"><p>{{typer}} is typing</p></ng-container>
+      <ng-container *ngFor="let typerId of chat.typing">
+        <p *ngIf="typerId !== user.uid">{{ getUserById(typerId) }} is typing</p>
+      </ng-container>
       <div class="row">
-        <input class="form-control col" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit(chat.id)" (input)="setTypingActive($event.target.value)">
+        <input class="form-control col" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit(chat.id)"
+          (input)="setTypingActive($event.target.value)">
         <button class="btn btn-primary clearfix " (click)="submit(chat.id)" [disabled]="!newMsg">Send</button>
       </div>
     </div>

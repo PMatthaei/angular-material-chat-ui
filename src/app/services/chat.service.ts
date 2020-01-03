@@ -14,6 +14,7 @@ const dummyUser = {
 })
 export class ChatService {
   $test: any;
+  userDictionary = {};
 
   constructor(
     private afs: AngularFirestore,
@@ -127,7 +128,6 @@ export class ChatService {
 
   joinUsers(chat$: Observable<any>) {
     let chat: any;
-    const userDictionary = {};
 
     return chat$.pipe(
       switchMap(c => {
@@ -138,18 +138,18 @@ export class ChatService {
         return users.length ? combineLatest(users) : of([]);
       }),
       map(users => {
-        this.buildUserDictionary(users, userDictionary);
+        this.buildUserDictionary(users);
         // Augment message data with newly fetched user data
         chat.messages = chat.messages.map((message: any) => {
-          return { ...message, user: userDictionary[message.uid] };
+          return { ...message, user: this.userDictionary[message.uid] };
         });
 
         return chat;
       }));
   }
 
-  private buildUserDictionary(users: unknown[], userDictionary: {}) {
-    users.forEach(user => (userDictionary[(<any>user).uid] = user));
+  private buildUserDictionary(users: unknown[]) {
+    users.forEach(user => (this.userDictionary[(<any>user).uid] = user));
   }
 
   private fetchUsers(uids: unknown[]) {
@@ -159,5 +159,9 @@ export class ChatService {
       return combineLatest(publicUserData, secureUserData)
       .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
     })
+  }
+
+  getUserById(typerId){
+    return this.userDictionary[typerId]
   }
 }
