@@ -25,7 +25,7 @@
     <div class="form container">
       <ng-container *ngFor="let typer of chat.typing"><p>{{typer}} is typing</p></ng-container>
       <div class="row">
-        <input class="form-control col" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit(chat.id)" (input)="setTypingActive(chat.id)">
+        <input class="form-control col" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit(chat.id)" (input)="setTypingActive($event.target.value)">
         <button class="btn btn-primary clearfix " (click)="submit(chat.id)" [disabled]="!newMsg">Send</button>
       </div>
     </div>

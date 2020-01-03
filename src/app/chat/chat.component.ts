@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../services/chat.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { tap, debounceTime } from 'rxjs/operators';
+import { tap, debounceTime, throttleTime, filter } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { from } from 'rxjs';
 
@@ -29,7 +29,11 @@ export class ChatComponent implements OnInit {
     this.chat$ = this.cs.joinUsers(source).pipe(tap(v => this.scrollBottom()));
     this.scrollBottom();
 
-    this.isTyping.asObservable().pipe(debounceTime(1500)).subscribe((data) => {
+    this.isTyping.asObservable().pipe(filter(data => data != ''), throttleTime(1400)).subscribe((data) => {
+      this.cs.sendIsTyping(chatId)
+    });
+
+    this.isTyping.asObservable().pipe(filter(data => data != ''), debounceTime(1500)).subscribe((data) => {
       this.cs.deleteIsTyping(chatId)
     });
   }
@@ -42,9 +46,8 @@ export class ChatComponent implements OnInit {
     return user.realName ? user.realName : user.name;
   }
 
-  setTypingActive(chatId) {
-    this.cs.sendIsTyping(chatId)
-    this.isTyping.next()
+  setTypingActive(value) {
+    this.isTyping.next(value)
   }
 
   submit(chatId) {
