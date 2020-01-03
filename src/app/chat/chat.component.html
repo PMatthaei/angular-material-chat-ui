@@ -28,7 +28,6 @@
       </ng-container>
       <div class="row">
         <form [formGroup]="chatForm"><input class="form-control col" formControlName="message" maxlength="100" (keydown.enter)="submit(chat.id)"></form>
-        <!--<input class="form-control col" [(ngModel)]="newMsg" maxlength="100" (keydown.enter)="submit(chat.id)" (input)="setTypingActive($event.target.value)">-->
         <button class="btn btn-primary clearfix " (click)="submit(chat.id)" [disabled]="!newMsg">Send</button>
       </div>
     </div>
