@@ -42,8 +42,9 @@ export class ChatService {
       switchMap(user => {
         const participatingChats = this.afs.collection('chats', ref => ref.where('participants', 'array-contains', user.uid)).snapshotChanges();
         const ownedChats = this.afs.collection('chats', ref => ref.where('ownerId', '==', user.uid)).snapshotChanges();
-        return merge(participatingChats, ownedChats)
+        return combineLatest(participatingChats, ownedChats)
           .pipe(
+            map(([participatingChats, ownedChats]) => { return [ ...participatingChats , ...ownedChats ] }),
             map(actions => {
               return actions.map(a => {
                 const chatData: Object = a.payload.doc.data();

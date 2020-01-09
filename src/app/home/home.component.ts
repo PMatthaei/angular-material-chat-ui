@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { ChatService } from '../services/chat.service';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ export class HomeComponent implements OnInit {
   constructor(public auth: AuthService, public cs: ChatService) {}
 
   ngOnInit() {
-    this.userChats$ = this.cs.getUserChats();
+    this.userChats$ = this.cs.getUserChats().pipe(tap((res) => console.log(res)));
   }
 
   getUserName(user) {
