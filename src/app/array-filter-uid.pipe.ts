@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'arrayFilterUid'
+  name: 'filterUid'
 })
 export class ArrayFilterUidPipe implements PipeTransform {
 
@@ -11,8 +11,7 @@ export class ArrayFilterUidPipe implements PipeTransform {
     }
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
-    console.log(value)
-    console.log(args)
+
     return value.filter(item => item != args[0]);
   }
 

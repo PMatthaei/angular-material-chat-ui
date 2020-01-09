@@ -16,7 +16,7 @@
 
     <ul>
       <li *ngFor="let chat of userChats$ | async">
-        <a class="btn btn-primary" style="margin: 8px" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </a>
+        <button class="btn btn-primary" style="margin: 8px" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </button>
       </li>
     </ul>
   </div>

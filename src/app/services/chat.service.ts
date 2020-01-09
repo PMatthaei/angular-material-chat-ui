@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { firestore } from 'firebase/app';
-import { map, switchMap, flatMap } from 'rxjs/operators';
+import { map, tap, switchMap, flatMap } from 'rxjs/operators';
 import { Observable, combineLatest, of, merge } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 const dummyUser = {
@@ -128,7 +128,7 @@ export class ChatService {
     }
   }
 
-  buildChat(chat$: Observable<any>) {
+  buildChat(chat$: Observable<any>): Observable<any> {
     let chat: any;
 
     return chat$.pipe(
@@ -145,7 +145,6 @@ export class ChatService {
         chat.messages = chat.messages.map((message: any) => {
           return { ...message, user: this.userDictionary[message.uid] };
         });
-
         return chat;
       }));
   }
@@ -154,12 +153,12 @@ export class ChatService {
     users.forEach(user => (this.userDictionary[(<any>user).uid] = user));
   }
 
-  private fetchUsers(uids: unknown[]) {
+  private fetchUsers(uids: unknown[]): Observable<any>[] {
     return uids.map(uid => {
       const publicUserData = this.afs.doc(`users/${uid}`).valueChanges();
       const secureUserData = this.afs.doc(`users/${uid}`).collection('secureData').valueChanges().pipe(catchError(err => of({})));
       return combineLatest(publicUserData, secureUserData)
-        .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
+        .pipe(map(([publicData, secureData]) => { return { ...publicData as {}, ...secureData[0] } }))
     })
   }
 

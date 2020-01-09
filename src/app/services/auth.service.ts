@@ -27,7 +27,6 @@ export class AuthService {
           const secureUserData = this.afs.doc(`users/${user.uid}`).collection('secureData').valueChanges().pipe(catchError(err => of({})));
           return combineLatest(publicUserData, secureUserData)
             .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
-          //return this.afs.doc<any>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
         }

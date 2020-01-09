@@ -4,33 +4,23 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item" routerLink="/"><a href="#">Back</a></li>
-          <li class="breadcrumb-item" aria-current="page"><a>Asset Chat - {{ chat.id }}</a></li>
+          <li class="breadcrumb-item" aria-current="page">Asset Chat - {{ chat.id }}</li>
         </ol>
       </nav>
     </div>
-
-    <div #chatBox class="container">
-      <div class="card" [class.text-right]="msg.uid !== user.uid" *ngFor="let msg of chat.messages; trackBy: trackByCreated">
-        <div class="card-body">
-          <img [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-          <h5 class="card-title">{{ getUserName(msg.user) }}</h5>
-          <p class="card-text">{{ msg.content }}</p>
-          <p class="card-text">{{ getCreatedDate(msg) }}</p>
-          <a href="#" class="btn btn-primary" *ngIf="chat.uid === user.uid || msg.uid === user.uid"
-            (click)="cs.deleteMessage(chat, msg)">Delete</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="form container">
-      <ng-container *ngFor="let typerId of chat.typing">
-        <p *ngIf="typerId !== user.uid">{{ getUserById(typerId) }} is typing ...</p>
-      </ng-container>
-      <div class="row">
-        <form [formGroup]="chatForm"><input class="form-control col" formControlName="message" maxlength="100" (keydown.enter)="submit(chat.id)"></form>
-        <button class="btn btn-primary clearfix " (click)="submit(chat.id)" [disabled]="!newMsg">Send</button>
-      </div>
-    </div>
-
+    <nb-layout>
+      <nb-layout-column>
+        <nb-chat title="Chatroom: Asset Bivucazumbibibibi" size="giant" scrollBottom="true">
+          <nb-chat-message *ngFor="let msg of messages" [type]="msg?.type" [message]="msg?.content"
+            [reply]="msg?.uid !== user?.uid" [sender]="getUserName(msg.user)" [date]="getCreatedDate(msg)"
+            [files]="msg?.files" [quote]="msg?.quote" [avatar]="msg?.user?.avatar">
+          </nb-chat-message>
+          <nb-chat-message *ngFor="let typerId of chat.typing | filterUid:user.uid" [type]="text" [reply]="typerId !== user.uid" [message]="getTypingUserById(typerId)">
+          </nb-chat-message>
+          <nb-chat-form (send)="submit($event, chat.id)" [dropFiles]="true">
+          </nb-chat-form>
+        </nb-chat>
+      </nb-layout-column>
+    </nb-layout>
   </ng-container>
 </ng-container>
