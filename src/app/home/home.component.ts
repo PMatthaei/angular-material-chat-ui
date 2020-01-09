@@ -13,7 +13,7 @@ export class HomeComponent implements OnInit {
   constructor(public auth: AuthService, public cs: ChatService) {}
 
   ngOnInit() {
-    this.userChats$ = this.cs.getUserChats().pipe(tap((res) => console.log(res)));
+    this.userChats$ = this.cs.getUserChats();
   }
 
   getUserName(user) {
