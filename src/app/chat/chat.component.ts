@@ -40,13 +40,7 @@ export class ChatComponent implements OnInit {
 
   messages: Message[] = [];
 
-
-  @HostListener('document:keypress', ['$event'])
-  handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.char != '') {
-      this.messageControl.patchValue(this.messageControl.value + event.char);
-    }
-  }
+  dateOptions = { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' };
 
   constructor(
     public cs: ChatService,
@@ -94,7 +88,7 @@ export class ChatComponent implements OnInit {
     if (!msg.createdAt) {
       return null
     }
-    return new Date(msg.createdAt)
+    return new Date(msg.createdAt).toLocaleString()
   }
 
   getUserName(user) {
@@ -108,19 +102,13 @@ export class ChatComponent implements OnInit {
     return new Date();
   }
 
-  submit(event, chatId) {
-    const files = !event.files ? [] : event.files.map((file) => {
-      return {
-        url: file.src,
-        type: file.type,
-        icon: 'file-text-outline',
-      };
-    });
-
-    if (!event.message) {
+  submit(chatId) {
+    const msg = this.messageControl.value;
+    if (!msg) {
       return alert('Please enter a message.');
     }
-    this.cs.sendMessage(chatId, event.message);
+    this.cs.sendMessage(chatId, msg);
+    this.messageControl.reset();
     this.scrollBottom();
   }
 

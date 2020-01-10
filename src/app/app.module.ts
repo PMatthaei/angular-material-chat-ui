@@ -17,8 +17,20 @@ import { environment } from '../environments/environment';
 import {NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArrayFilterUidPipe } from './array-filter-uid.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NbThemeModule, NbLayoutModule, NbChatModule, NbCardModule } from '@nebular/theme';
-import { NbEvaIconsModule } from '@nebular/eva-icons'
+import {
+  MatButtonModule,
+  MatMenuModule,
+  MatToolbarModule,
+  MatIconModule,
+  MatCardModule,
+  MatFormFieldModule,
+
+  MatInputModule,
+} from '@angular/material';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
+
+
 @NgModule({
   declarations: [AppComponent, ChatComponent, HomeComponent, ArrayFilterUidPipe],
   imports: [
@@ -27,16 +39,18 @@ import { NbEvaIconsModule } from '@nebular/eva-icons'
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+    MatIconModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
+    FlexLayoutModule,
     AngularFireStorageModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    NbThemeModule.forRoot({ name: 'default' }),
-    NbLayoutModule,
-    NbEvaIconsModule,
-    NbChatModule,NbCardModule
   ],
   providers: [],
   bootstrap: [AppComponent]

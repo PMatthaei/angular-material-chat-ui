@@ -8,19 +8,92 @@
         </ol>
       </nav>
     </div>
-    <nb-layout>
-      <nb-layout-column>
-        <nb-chat title="Chatroom: Asset Bivucazumbibibibi" size="giant" scrollBottom="true">
-          <nb-chat-message *ngFor="let msg of messages" [type]="msg?.type" [message]="msg?.content"
-            [reply]="msg?.uid !== user?.uid" [sender]="getUserName(msg.user)" [date]="getCreatedDate(msg)"
-            [files]="msg?.files" [quote]="msg?.quote" [avatar]="msg?.user?.avatar">
-          </nb-chat-message>
-          <nb-chat-message *ngFor="let typerId of chat.typing | filterUid:user.uid" [type]="text" [reply]="typerId !== user.uid" [message]="getTypingUserById(typerId)">
-          </nb-chat-message>
-          <nb-chat-form (send)="submit($event, chat.id)" [dropFiles]="true">
-          </nb-chat-form>
-        </nb-chat>
-      </nb-layout-column>
-    </nb-layout>
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+      <mat-card *ngFor="let msg of messages; trackBy: trackByCreated" style="margin: 8px; width: 600px">
+        <mat-card-header>
+          <img mat-card-avatar [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
+          <mat-card-title>{{ getUserName(msg.user) }}</mat-card-title>
+          <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-card
+            [ngStyle]="{'background-color':msg.uid !== user.uid ? 'lightgrey' : '#536DFE', 'color':msg.uid !== user.uid ? 'black' : 'white' }">
+            {{ msg.content }}
+          </mat-card>
+        </mat-card-content>
+      </mat-card>
+      
+      <ng-container *ngFor="let typerId of chat.typing">
+        <mat-card *ngIf="typerId !== user.uid" [ngStyle]="{'background-color': 'lightgrey', 'color': 'black'}">
+          {{ getUserById(typerId) }} is typing ...
+        </mat-card>
+      </ng-container>
+
+
+      <div [formGroup]="chatForm" fxLayout="row" style="width: 600px;" fxLayoutGap="1%">
+        <mat-form-field fxFlex="90%">
+          <textarea matInput placeholder="Message" formControlName="message"></textarea>
+        </mat-form-field> 
+        <button fxFlex mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+
+
+    </div>
+
+
+
+
   </ng-container>
 </ng-container>
+
+<!--
+  <ng-container *ngIf="chat$ | async as chat">
+  <ng-container *ngIf=" auth.user$ | async as user">
+    <div class="container">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item" routerLink="/"><a href="#">Back</a></li>
+          <li class="breadcrumb-item" aria-current="page"><a>Asset Chat - {{ chat.id }}</a></li>
+        </ol>
+      </nav>
+    </div>
+
+    <div #chatBox class="container">
+      <div class="card" [class.text-right]="msg.uid !== user.uid" style="margin: 16px;"
+        *ngFor="let msg of chat.messages; trackBy: trackByCreated">
+        <div class="card-body">
+          <img [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
+          <h5 class="card-title">{{ getUserName(msg.user) }}</h5>
+          <p class="card-text">{{ msg.content }}</p>
+          <p class="card-text">{{ getCreatedDate(msg) }}</p>
+          <a href="#" class="btn btn-primary" *ngIf="chat.uid === user.uid || msg.uid === user.uid"
+            (click)="cs.deleteMessage(chat, msg)">Delete</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="form container">
+      <div class="row" style="height: 36px;">
+        <ng-container class="col" *ngFor="let typerId of chat.typing">
+          <p *ngIf="typerId !== user.uid">{{ getUserById(typerId) }} is typing ...</p>
+        </ng-container>
+      </div>
+
+      <div class="row">
+        <div class="col-8">
+          <form [formGroup]="chatForm"><input class="form-control col" formControlName="message" maxlength="100" (keydown.enter)="submit(chat.id)"></form>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary btn-block" (click)="submit(chat.id)" [disabled]="!newMsg">Send</button>
+        </div>
+        <div class="col">
+          <button class="btn btn-secondary btn-block" (click)="addAttachment(chat.id)">Add Attachment</button>
+        </div>
+      </div>
+    </div>
+
+  </ng-container>
+</ng-container>
+-->
