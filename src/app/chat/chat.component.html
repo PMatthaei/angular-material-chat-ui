@@ -20,7 +20,7 @@
               'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
             <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
               [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-            <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)">{{ getUserName(msg.user) }}</mat-card-title>
+            <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">{{ getUserName(msg.user) }}</mat-card-title>
             <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content style="display: inline-flex; flex-direction: column;">
@@ -68,9 +68,9 @@
       </div>
 
       <!-- Send form -->
-      <mat-card [formGroup]="chatForm" fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
-        <mat-card-content>
-          <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px)">
+      <mat-card [formGroup]="chatForm" >
+        <mat-card-content fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
+          <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px-8px-8px)">
             <textarea matInput placeholder="Message" formControlName="message"></textarea>
           </mat-form-field>
   
