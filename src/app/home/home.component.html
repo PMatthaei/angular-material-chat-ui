@@ -14,11 +14,12 @@
 
     <h3>Chatrooms</h3>
 
-    <ul>
-      <li *ngFor="let chat of userChats$ | async">
-        <button mat-raised-button color="primary" style="margin: 8px" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </button>
-      </li>
-    </ul>
+    <mat-list role="list">
+      <mat-list-item role="listitem" *ngFor="let chat of userChats$ | async">
+        <button mat-stroked-button color="primary" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </button>
+      </mat-list-item>
+    </mat-list>
+
   </div>
 
   <ng-template #login>

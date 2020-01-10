@@ -25,6 +25,8 @@ import {
   MatCardModule,
   MatFormFieldModule,
   MatInputModule,
+  MatListModule,
+  MatTooltipModule
 } from '@angular/material';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -45,6 +47,8 @@ import { MatRippleModule } from '@angular/material/core';
     MatIconModule,
     MatRippleModule,
     MatToolbarModule,
+    MatTooltipModule,
+    MatListModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,

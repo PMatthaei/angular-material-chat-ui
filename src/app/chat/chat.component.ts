@@ -95,6 +95,10 @@ export class ChatComponent implements OnInit {
     return names;
   }
 
+  isPreviousMessageFromSameAuthor(currentIndex){
+    return currentIndex == 0 || (currentIndex > 0 && this.messages[currentIndex-1].uid !==  this.messages[currentIndex].uid)
+  }
+
   getCreatedDate(msg) {
     if (!msg.createdAt) {
       return null
@@ -128,6 +132,6 @@ export class ChatComponent implements OnInit {
   }
 
   private scrollBottom() {
-    //setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 500);
+    setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 500);
   }
 }
