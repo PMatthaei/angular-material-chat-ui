@@ -1,14 +1,11 @@
 <ng-container *ngIf="chat$ | async as chat">
   <ng-container *ngIf=" auth.user$ | async as user">
     <!-- Navbar -->
-    <div class="container">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item" routerLink="/"><a href="#">Back</a></li>
-          <li class="breadcrumb-item" aria-current="page">Asset Chat - {{ chat.id }}</li>
-        </ol>
-      </nav>
-    </div>
+    <mat-toolbar>
+      <span>Asset Chat - {{ chat.id }}</span>
+      <span style="flex: 1 1 auto;"></span>
+      <button mat-button routerLink="/">Back to chats</button>
+    </mat-toolbar>
     <!-- Chat container-->
     <div style="width: 100%; display: flex; flex-direction: column; align-items: center">
        <!-- Chat component-->

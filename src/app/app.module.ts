@@ -44,6 +44,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatCardModule,
     MatIconModule,
     MatRippleModule,
+    MatToolbarModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
