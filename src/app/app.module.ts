@@ -38,7 +38,6 @@ import { MatRippleModule } from '@angular/material/core';
     AppRoutingModule,
     ReactiveFormsModule,
     FormsModule,
-    NgbModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,

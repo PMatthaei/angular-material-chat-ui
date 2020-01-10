@@ -5,10 +5,10 @@
     <img [src]="user.photoURL" width="50px">
     <p>{{ getUserName(user) }}</p>
 
-    <button class="btn btn-primary" (click)="auth.signOut()">Sign Out</button>
+    <button mat-raised-button color="secondary" (click)="auth.signOut()">Sign Out</button>
     <hr>
 
-    <button class="btn btn-primary" (click)="cs.create()">Create New Chat</button>
+    <button mat-raised-button color="primary" (click)="cs.create()">Create New Chat</button>
 
     <hr>
 
@@ -16,13 +16,13 @@
 
     <ul>
       <li *ngFor="let chat of userChats$ | async">
-        <button class="btn btn-primary" style="margin: 8px" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </button>
+        <button mat-raised-button color="primary" style="margin: 8px" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </button>
       </li>
     </ul>
   </div>
 
   <ng-template #login>
-    <button class="btn btn-primary" (click)="auth.googleSignIn()">Login with Google</button>
+    <button mat-raised-button color="primary" (click)="auth.googleSignIn()">Login with Google</button>
   </ng-template>
 
 </div>
