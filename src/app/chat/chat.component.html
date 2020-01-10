@@ -22,7 +22,7 @@
           </mat-card>
         </mat-card-content>
       </mat-card>
-      
+
       <ng-container *ngFor="let typerId of chat.typing">
         <mat-card *ngIf="typerId !== user.uid" [ngStyle]="{'background-color': 'lightgrey', 'color': 'black'}">
           {{ getUserById(typerId) }} is typing ...
@@ -31,11 +31,14 @@
 
 
       <div [formGroup]="chatForm" fxLayout="row" style="width: 600px;" fxLayoutGap="1%">
-        <mat-form-field fxFlex="90%">
+        <mat-form-field fxFlex="80%">
           <textarea matInput placeholder="Message" formControlName="message"></textarea>
         </mat-form-field> 
         <button fxFlex mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
           <mat-icon>send</mat-icon>
+        </button>
+        <button fxFlex mat-fab color="secondary">
+          <mat-icon>attach_file</mat-icon>
         </button>
       </div>
 
