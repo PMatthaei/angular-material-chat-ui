@@ -41,62 +41,6 @@
           <mat-icon>attach_file</mat-icon>
         </button>
       </div>
-
-
     </div>
-
-
-
-
   </ng-container>
 </ng-container>
-
-<!--
-  <ng-container *ngIf="chat$ | async as chat">
-  <ng-container *ngIf=" auth.user$ | async as user">
-    <div class="container">
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item" routerLink="/"><a href="#">Back</a></li>
-          <li class="breadcrumb-item" aria-current="page"><a>Asset Chat - {{ chat.id }}</a></li>
-        </ol>
-      </nav>
-    </div>
-
-    <div #chatBox class="container">
-      <div class="card" [class.text-right]="msg.uid !== user.uid" style="margin: 16px;"
-        *ngFor="let msg of chat.messages; trackBy: trackByCreated">
-        <div class="card-body">
-          <img [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-          <h5 class="card-title">{{ getUserName(msg.user) }}</h5>
-          <p class="card-text">{{ msg.content }}</p>
-          <p class="card-text">{{ getCreatedDate(msg) }}</p>
-          <a href="#" class="btn btn-primary" *ngIf="chat.uid === user.uid || msg.uid === user.uid"
-            (click)="cs.deleteMessage(chat, msg)">Delete</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="form container">
-      <div class="row" style="height: 36px;">
-        <ng-container class="col" *ngFor="let typerId of chat.typing">
-          <p *ngIf="typerId !== user.uid">{{ getUserById(typerId) }} is typing ...</p>
-        </ng-container>
-      </div>
-
-      <div class="row">
-        <div class="col-8">
-          <form [formGroup]="chatForm"><input class="form-control col" formControlName="message" maxlength="100" (keydown.enter)="submit(chat.id)"></form>
-        </div>
-        <div class="col">
-          <button class="btn btn-primary btn-block" (click)="submit(chat.id)" [disabled]="!newMsg">Send</button>
-        </div>
-        <div class="col">
-          <button class="btn btn-secondary btn-block" (click)="addAttachment(chat.id)">Add Attachment</button>
-        </div>
-      </div>
-    </div>
-
-  </ng-container>
-</ng-container>
--->
