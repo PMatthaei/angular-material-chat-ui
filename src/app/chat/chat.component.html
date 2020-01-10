@@ -1,5 +1,6 @@
 <ng-container *ngIf="chat$ | async as chat">
   <ng-container *ngIf=" auth.user$ | async as user">
+    <!-- Navbar -->
     <div class="container">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -8,39 +9,83 @@
         </ol>
       </nav>
     </div>
-    <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-      <mat-card *ngFor="let msg of messages; trackBy: trackByCreated" style="margin: 8px; width: 600px">
-        <mat-card-header>
-          <img mat-card-avatar [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-          <mat-card-title>{{ getUserName(msg.user) }}</mat-card-title>
-          <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <mat-card
-            [ngStyle]="{'background-color':msg.uid !== user.uid ? 'lightgrey' : '#536DFE', 'color':msg.uid !== user.uid ? 'black' : 'white' }">
-            {{ msg.content }}
-          </mat-card>
-        </mat-card-content>
-      </mat-card>
-
-      <ng-container *ngFor="let typerId of chat.typing">
-        <mat-card *ngIf="typerId !== user.uid" [ngStyle]="{'background-color': 'lightgrey', 'color': 'black'}">
-          {{ getUserById(typerId) }} is typing ...
+    <!-- Chat container-->
+    <div style="width: 100%; display: flex; flex-direction: column; align-items: center">
+       <!-- Chat component-->
+      <div style="width: 900px; height: 1000px; overflow-y: scroll; display: flex; flex-direction: column">
+        <!-- Message-->
+        <mat-card *ngFor="let msg of messages; trackBy: trackByCreated" 
+        style="margin: 8px; width: 600px"
+        [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
+          <!-- Message Header -->
+          <mat-card-header
+            [ngStyle]="{
+              'justify-content': 'flex-start',
+              'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
+            <img mat-card-avatar [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
+            <mat-card-title>{{ getUserName(msg.user) }}</mat-card-title>
+            <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
+          </mat-card-header
+          >
+          <mat-card-content style="display: flex; flex-direction: column;">
+            <!-- Message content-->
+            <mat-card style="display: inline-flex !important; margin-bottom: 8px;"
+              [ngStyle]="{
+                'background-color':msg.uid !== user.uid ? 'lightgrey' : '#536DFE', 
+                'color':msg.uid !== user.uid ? 'black' : 'white',
+                'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
+              {{ msg.content }}
+            </mat-card>
+            <!-- Attached files -->
+            <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
+              <!-- File-->
+              <div style="display: inline-flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 4px; cursor: pointer;"
+                class="mat-elevation-z2"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleUnbounded]="false">
+                <mat-icon>insert_drive_file</mat-icon>
+                Testfile1.pdf
+              </div>
+              <div style="display: inline-flex; flex-direction: column; align-items: center; padding: 8px; border-radius: 4px; cursor: pointer;"
+                class="mat-elevation-z2"
+                matRipple
+                [matRippleCentered]="true"
+                [matRippleUnbounded]="false">
+                <mat-icon>insert_drive_file</mat-icon>
+                Testfile2laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
+              </div>
+            </div>
+          </mat-card-content>
         </mat-card>
-      </ng-container>
+        <!-- "is typing" Message-->
+        <!--<ng-container *ngFor="let typerId of chat.typing | filterUid:user.uid">
+          <div style="margin: 8px;">
+            <mat-card *ngIf="typerId !== user.uid" [ngStyle]="{'background-color': 'lightgrey', 'color': 'black'}">
+              {{ getUserById(typerId) }} is typing ...
+            </mat-card>
+          </div>
+        </ng-container> -->
+        <mat-card *ngIf="showTyping(chat.typing, user.uid)" [ngStyle]="{'background-color': 'lightgrey', 'color': 'black', 'margin': '8px'}">
+          {{ getTypingUsersById(chat.typing, user.uid) }}
+        </mat-card>
+      </div>
 
-
-      <div [formGroup]="chatForm" fxLayout="row" style="width: 600px;" fxLayoutGap="1%">
-        <mat-form-field fxFlex="80%">
+      <!-- Send form -->
+      <div [formGroup]="chatForm" fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
+        <mat-form-field fxFlex="calc(900px-56px-56px)" >
           <textarea matInput placeholder="Message" formControlName="message"></textarea>
         </mat-form-field> 
-        <button fxFlex mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
+        
+        <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
           <mat-icon>send</mat-icon>
         </button>
-        <button fxFlex mat-fab color="secondary">
+
+        <button mat-fab color="secondary">
           <mat-icon>attach_file</mat-icon>
         </button>
       </div>
     </div>
+    
   </ng-container>
 </ng-container>

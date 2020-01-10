@@ -84,6 +84,17 @@ export class ChatComponent implements OnInit {
     return this.getUserName(this.cs.getUserById(typerId)) + ' is typing ...'
   }
 
+  showTyping(typing, userId) {
+    return typing.some(typerId => typerId !== userId)
+  }
+
+  getTypingUsersById(typing, userId) {
+    const otherUserIds = typing.filter(typerId => typerId !== userId);
+    let names: string = otherUserIds.map(typerId => this.getUserName(this.cs.getUserById(typerId))).join(', ')
+    otherUserIds.length > 1 ? names = names + ' are typing...' : names = names + ' is typing...'
+    return names;
+  }
+
   getCreatedDate(msg) {
     if (!msg.createdAt) {
       return null

@@ -24,11 +24,11 @@ import {
   MatIconModule,
   MatCardModule,
   MatFormFieldModule,
-
   MatInputModule,
 } from '@angular/material';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatRippleModule } from '@angular/material/core';
 
 
 @NgModule({
@@ -44,6 +44,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatInputModule,
     MatCardModule,
     MatIconModule,
+    MatRippleModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,
