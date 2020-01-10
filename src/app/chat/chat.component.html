@@ -1,18 +1,18 @@
 <ng-container *ngIf="chat$ | async as chat">
   <ng-container *ngIf=" auth.user$ | async as user">
     <!-- Navbar -->
-    <mat-toolbar>
+    <mat-toolbar color="primary">
       <span>Asset Chat - {{ chat.id }}</span>
       <span style="flex: 1 1 auto;"></span>
-      <button mat-button routerLink="/">Back to chats</button>
+      <button mat-button routerLink="/" style="font-size: 20px;">Back to chats</button>
     </mat-toolbar>
     <!-- Chat container-->
     <div style="width: 100%; display: flex; flex-direction: column; align-items: center">
       <!-- Chat component-->
-      <div style="width: 900px; height: 1000px; overflow-y: scroll; display: flex; flex-direction: column">
+      <div style="width: 900px; height: 1000px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray;">
         <!-- Message-->
         <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
-          style="width: 600px; box-shadow: none"
+          style="width: 600px; box-shadow: none; background-color: lightgray;"
           [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
           <!-- Message Header -->
           <mat-card-header [ngStyle]="{
@@ -26,8 +26,8 @@
           <mat-card-content style="display: inline-flex; flex-direction: column;">
             <!-- Message content-->
             <mat-card [ngStyle]="{
-                'background-color':msg.uid !== user.uid ? 'lightgrey' : '#536DFE', 
-                'color':msg.uid !== user.uid ? 'black' : 'white',
+                'background-color':msg.uid !== user.uid ? 'lightslategrey' : '#536DFE', 
+                'color':msg.uid !== user.uid ? 'white' : 'white',
                 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
                 'text-align': msg.uid !== user.uid ? 'end' : 'start',
                 'border-top-right-radius': msg.uid !== user.uid ? '0px': '4px',
@@ -68,19 +68,22 @@
       </div>
 
       <!-- Send form -->
-      <div [formGroup]="chatForm" fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
-        <mat-form-field fxFlex="calc(900px-56px-56px)">
-          <textarea matInput placeholder="Message" formControlName="message"></textarea>
-        </mat-form-field>
+      <mat-card [formGroup]="chatForm" fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
+        <mat-card-content>
+          <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px)">
+            <textarea matInput placeholder="Message" formControlName="message"></textarea>
+          </mat-form-field>
+  
+          <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
+            <mat-icon>send</mat-icon>
+          </button>
+  
+          <button mat-fab color="secondary">
+            <mat-icon>attach_file</mat-icon>
+          </button>
+        </mat-card-content>
 
-        <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
-          <mat-icon>send</mat-icon>
-        </button>
-
-        <button mat-fab color="secondary">
-          <mat-icon>attach_file</mat-icon>
-        </button>
-      </div>
+      </mat-card>
     </div>
 
   </ng-container>
