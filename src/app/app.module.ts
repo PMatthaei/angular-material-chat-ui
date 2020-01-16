@@ -8,7 +8,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireStorageModule, StorageBucket } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { ChatComponent } from './chat/chat.component';
@@ -23,6 +23,7 @@ import {
   MatToolbarModule,
   MatIconModule,
   MatCardModule,
+  MatProgressBarModule,
   MatFormFieldModule,
   MatInputModule,
   MatListModule,
@@ -49,6 +50,7 @@ import { MatRippleModule } from '@angular/material/core';
     MatToolbarModule,
     MatTooltipModule,
     MatListModule,
+    MatProgressBarModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireAuthModule,

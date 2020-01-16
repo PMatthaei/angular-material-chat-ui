@@ -10,6 +10,7 @@ import {
   FormGroup,
   FormBuilder
 } from '@angular/forms';
+import { AttachmentService } from '../services/attachment.service';
 
 interface User {
   uid: string;
@@ -44,6 +45,7 @@ export class ChatComponent implements OnInit {
 
   constructor(
     public cs: ChatService,
+    public as: AttachmentService,
     private route: ActivatedRoute,
     public auth: AuthService,
     private fb: FormBuilder
@@ -123,6 +125,7 @@ export class ChatComponent implements OnInit {
       return alert('Please enter a message.');
     }
     this.cs.sendMessage(chatId, msg);
+    this.as.uploadAttachments().subscribe(res => console.log(res), err => console.log(err))
     this.messageControl.reset();
     this.scrollBottom();
   }
@@ -133,5 +136,21 @@ export class ChatComponent implements OnInit {
 
   private scrollBottom() {
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 500);
+  }
+
+  setSelectedFiles(event){
+    this.as.setSelectedFiles(event)
+  }
+
+  getAttachments(){
+    return this.as.getFiles()
+  }
+
+  hasAttachments(){
+    return this.as.getFiles().length > 0
+  }
+
+  getUploadPercentage(index){
+    return this.as.getUploadPercentages()[index].pipe(tap((res) => console.log("Upload", res)))
   }
 }

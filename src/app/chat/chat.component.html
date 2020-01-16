@@ -9,10 +9,11 @@
     <!-- Chat container-->
     <div style="width: 100%; display: flex; flex-direction: column; align-items: center">
       <!-- Chat component-->
-      <div style="width: 900px; height: 1000px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray;">
+      <div
+        style="width: 900px; height: 1000px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
         <!-- Message-->
         <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
-          style="width: 600px; box-shadow: none; background-color: lightgray;"
+          style="width: 600px; box-shadow: none; background-color: transparent;"
           [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
           <!-- Message Header -->
           <mat-card-header [ngStyle]="{
@@ -20,7 +21,8 @@
               'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
             <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
               [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-            <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">{{ getUserName(msg.user) }}</mat-card-title>
+            <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
+              {{ getUserName(msg.user) }}</mat-card-title>
             <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content style="display: inline-flex; flex-direction: column;">
@@ -68,20 +70,38 @@
       </div>
 
       <!-- Send form -->
-      <mat-card [formGroup]="chatForm" >
-        <mat-card-content fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
-          <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px-8px-8px)">
-            <textarea matInput placeholder="Message" formControlName="message"></textarea>
-          </mat-form-field>
-  
-          <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
-            <mat-icon>send</mat-icon>
-          </button>
-  
-          <button mat-fab color="secondary">
-            <mat-icon>attach_file</mat-icon>
-          </button>
+      <mat-card [formGroup]="chatForm">
+        <mat-card-content>
+          <div fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
+            <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px-8px-8px)">
+              <textarea matInput placeholder="Message" formControlName="message"></textarea>
+            </mat-form-field>
+
+            <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
+              <mat-icon>send</mat-icon>
+            </button>
+
+            <input #fileInput style="display: none;" id="input-file-id" multiple type="file"
+              (change)="setSelectedFiles($event)" />
+            <button mat-fab color="accent" (click)="fileInput.click()">
+              <mat-icon>attach_file</mat-icon>
+            </button>
+          </div>
+
+          <h6 *ngIf="hasAttachments()">Attachments:</h6>
+
+          <div fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center" matTooltip="These files will be uploaded as a attachment for the message above." matTooltipPosition="below">
+            <div>
+              <button *ngFor="let attachment of getAttachments(); let i = index" mat-stroked-button color="primary" disabled>
+                <mat-icon>insert_drive_file</mat-icon>
+                {{attachment.name}}
+              </button>
+              <mat-progress-bar mode="determinate" value="getUploadPercentage(i) | async"></mat-progress-bar>
+            </div>
+
+          </div>
         </mat-card-content>
+
 
       </mat-card>
     </div>
