@@ -25,8 +25,8 @@ export class AttachmentService {
     }
 
     uploadAttachments() {
-        return combineLatest(this.filesAsArray.map((file: File) => this.uploadAttachment(file))).pipe(
-            finalize(() => this.files.clear()))
+        return combineLatest(this.filesAsArray.map((file: File) => this.uploadAttachment(file)))
+        .pipe(finalize(() => this.files.clear()))
     }
 
     uploadAttachment(file: File) {
