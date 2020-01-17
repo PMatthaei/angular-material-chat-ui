@@ -11,23 +11,27 @@
       <!-- Chat container-->
       <div style="width: 100%; display: flex; flex-direction: column; align-items: center" fxFlex="calc(100%-64px)">
         <!-- Chat component-->
-        <div style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
+        <div
+          style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
           <!-- Message-->
-          <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index" style="width: 75%; box-shadow: none; background-color: transparent;"
-            [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
-            <!-- Message Header -->
-            <mat-card-header [ngStyle]="{
+          <ng-container *ngFor="let msg of messages; trackBy: trackByCreated; let i = index">
+            <mat-chip style="width: fit-content; align-self: center; margin: 8px" *ngIf="isPreviousMessageFromOtherDay(i)" color="accent" selected removable="false">{{ getDateDivider(msg) }}</mat-chip>
+            <mat-card 
+              style="width: 75%; box-shadow: none; background-color: transparent;"
+              [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
+              <!-- Message Header -->
+              <mat-card-header [ngStyle]="{
               'justify-content': 'flex-start',
               'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
-              <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
-                [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-              <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
-                {{ getUserName(msg.user) }}</mat-card-title>
-              <mat-card-subtitle style="margin-bottom: 4px;">{{ getCreatedDate(msg) }}</mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content style="display: inline-flex; flex-direction: column; width: 100%;">
-              <!-- Message content-->
-              <mat-card [ngStyle]="{
+                <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
+                  [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
+                <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
+                  {{ getUserName(msg.user) }}</mat-card-title>
+                <mat-card-subtitle style="margin-bottom: 4px;">{{ getCreatedDate(msg) }}</mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content style="display: inline-flex; flex-direction: column; width: 100%;">
+                <!-- Message content-->
+                <mat-card [ngStyle]="{
                 'background-color':msg.uid !== user.uid ? 'lightslategrey' : '#536DFE', 
                 'color':msg.uid !== user.uid ? 'white' : 'white',
                 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
@@ -38,8 +42,8 @@
                 'max-width': '100%',
                 'margin-bottom': '8px',
                 'padding': '12px'}">
-                <span style="overflow-wrap: break-word;">{{ msg.content }}</span>
-              </mat-card>
+                  <span style="overflow-wrap: break-word;">{{ msg.content }}</span>
+                </mat-card>
 
                 <button [ngStyle]="{
                   'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
@@ -47,22 +51,24 @@
                   'font-size': '10px',
                   'line-height': '18px'}" mat-stroked-button>REPLY</button>
 
-              <!-- Attached files -->
-              <mat-chip-list 
-                [ngStyle]="{ 'display': 'flex', 'justify-content': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
-                <mat-chip selected color="primary">
-                  <mat-icon>insert_drive_file</mat-icon>
-                  Testfile1laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
-                </mat-chip>
-                <mat-chip selected color="primary">
-                  <mat-icon>insert_drive_file</mat-icon>
-                  Testfile1.pdf
-                </mat-chip>
-              </mat-chip-list>
+                <!-- Attached files -->
+                <mat-chip-list
+                  [ngStyle]="{ 'display': 'flex', 'justify-content': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
+                  <mat-chip selected color="primary">
+                    <mat-icon>insert_drive_file</mat-icon>
+                    Testfile1laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
+                  </mat-chip>
+                  <mat-chip selected color="primary">
+                    <mat-icon>insert_drive_file</mat-icon>
+                    Testfile1.pdf
+                  </mat-chip>
+                </mat-chip-list>
 
-            </mat-card-content>
+              </mat-card-content>
 
-          </mat-card>
+            </mat-card>
+          </ng-container>
+
           <!-- "is typing" Message-->
           <mat-card *ngIf="showTyping(chat.typing, user.uid)"
             [ngStyle]="{'background-color': 'lightgrey', 'color': 'black', 'margin': '8px'}">
@@ -93,7 +99,8 @@
 
             <h6 *ngIf="hasAttachments()">Attachments:</h6>
 
-            <mat-chip-list #chipList style="width: 100%; margin-bottom: 8px;" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center"
+            <mat-chip-list #chipList style="width: 100%; margin-bottom: 8px;" fxLayout="row" fxLayoutGap="8px"
+              fxLayoutAlign="start center"
               matTooltip="These files will be uploaded as a attachment for the message above."
               matTooltipPosition="below">
               <mat-chip *ngFor="let attachment of getAttachments(); let i = index" selected removable
@@ -104,7 +111,8 @@
               </mat-chip>
             </mat-chip-list>
 
-            <mat-progress-bar *ngIf="getAttachments().length > 0" mode="determinate" value="getUploadPercentage(i) | async"></mat-progress-bar>
+            <mat-progress-bar *ngIf="getAttachments().length > 0" mode="determinate"
+              value="getUploadPercentage(i) | async"></mat-progress-bar>
 
           </mat-card-content>
 

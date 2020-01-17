@@ -101,6 +101,24 @@ export class ChatComponent implements OnInit {
     return currentIndex == 0 || (currentIndex > 0 && this.messages[currentIndex-1].uid !==  this.messages[currentIndex].uid)
   }
 
+  isPreviousMessageFromOtherDay(currentIndex){
+    const prevMsg = this.messages[currentIndex - 1];
+    if(!prevMsg){
+      return true;
+    }
+    const prevDate = new Date(prevMsg.createdAt).getDay();
+    const date = new Date(this.messages[currentIndex].createdAt).getDay();
+    return currentIndex == 0 || (currentIndex > 0 && prevDate !== date)
+  }
+
+  getDateDivider(msg){
+    if (!msg.createdAt) {
+      return null
+    }
+    const date = new Date(msg.createdAt);
+    return date.toLocaleDateString("de-DE", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
   getCreatedDate(msg) {
     if (!msg.createdAt) {
       return null
