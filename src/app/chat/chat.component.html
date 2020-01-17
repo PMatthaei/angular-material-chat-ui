@@ -1,33 +1,34 @@
 <ng-container *ngIf="chat$ | async as chat">
   <ng-container *ngIf=" auth.user$ | async as user">
-    <!-- Navbar -->
-    <mat-toolbar color="primary">
-      <span>Asset Chat - {{ chat.id }}</span>
-      <span style="flex: 1 1 auto;"></span>
-      <button mat-button routerLink="/" style="font-size: 20px;">Back to chats</button>
-    </mat-toolbar>
-    <!-- Chat container-->
-    <div style="width: 100%; display: flex; flex-direction: column; align-items: center">
-      <!-- Chat component-->
-      <div
-        style="width: 900px; height: 1000px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
-        <!-- Message-->
-        <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
-          style="width: 600px; box-shadow: none; background-color: transparent;"
-          [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
-          <!-- Message Header -->
-          <mat-card-header [ngStyle]="{
+    <div fxLayout="column" style="height:100%">
+      <!-- Navbar -->
+      <mat-toolbar color="primary" fxFlex="64px">
+        <span>Asset Chat - {{ chat.id }}</span>
+        <span style="flex: 1 1 auto;"></span>
+        <button mat-button routerLink="/" style="font-size: 20px;">Back to chats</button>
+      </mat-toolbar>
+      <!-- Chat container-->
+      <div style="width: 100%; display: flex; flex-direction: column; align-items: center" fxFlex="calc(100%-64px)">
+        <!-- Chat component-->
+        <div
+          style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
+          <!-- Message-->
+          <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
+            style="width: 600px; box-shadow: none; background-color: transparent;"
+            [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
+            <!-- Message Header -->
+            <mat-card-header [ngStyle]="{
               'justify-content': 'flex-start',
               'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
-            <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
-              [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-            <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
-              {{ getUserName(msg.user) }}</mat-card-title>
-            <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content style="display: inline-flex; flex-direction: column;">
-            <!-- Message content-->
-            <mat-card [ngStyle]="{
+              <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
+                [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
+              <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
+                {{ getUserName(msg.user) }}</mat-card-title>
+              <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content style="display: inline-flex; flex-direction: column; width: 100%;">
+              <!-- Message content-->
+              <mat-card [ngStyle]="{
                 'background-color':msg.uid !== user.uid ? 'lightslategrey' : '#536DFE', 
                 'color':msg.uid !== user.uid ? 'white' : 'white',
                 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
@@ -36,75 +37,80 @@
                 'border-top-left-radius': msg.uid === user.uid ? '0px': '4px',
                 'min-width': '150px',
                 'margin-bottom': '8px' }">
-              {{ msg.content }}
-            </mat-card>
+                {{ msg.content }}
+              </mat-card>
 
-            <div [ngStyle]="{
+              <div [ngStyle]="{
               'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
               'margin-bottom': '8px'}">
-              <button mat-stroked-button>REPLY</button>
+                <button mat-stroked-button>REPLY</button>
+              </div>
+
+              <!-- Attached files -->
+              <mat-chip-list 
+                [ngStyle]="{ 'display': 'flex', 'justify-content': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
+                <mat-chip selected color="primary">
+                  <mat-icon>insert_drive_file</mat-icon>
+                  Testfile1laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
+                </mat-chip>
+                <mat-chip selected color="primary">
+                  <mat-icon>insert_drive_file</mat-icon>
+                  Testfile1.pdf
+                </mat-chip>
+              </mat-chip-list>
+
+            </mat-card-content>
+
+          </mat-card>
+          <!-- "is typing" Message-->
+          <mat-card *ngIf="showTyping(chat.typing, user.uid)"
+            [ngStyle]="{'background-color': 'lightgrey', 'color': 'black', 'margin': '8px'}">
+            {{ getTypingUsersById(chat.typing, user.uid) }}
+          </mat-card>
+        </div>
+
+        <!-- Send form -->
+        <mat-card [formGroup]="chatForm" style="width: 50%; min-width: 600px; margin-bottom: 8px">
+          <mat-card-content>
+            <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
+              <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px-8px-8px)">
+                <textarea matInput placeholder="Message" formControlName="message"></textarea>
+              </mat-form-field>
+
+              <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
+                <mat-icon>send</mat-icon>
+              </button>
+
+              <input #fileInput style="display: none;" id="input-file-id" multiple type="file"
+                (change)="setSelectedFiles($event)" />
+
+              <button mat-fab color="accent" (click)="fileInput.click()">
+                <mat-icon>attach_file</mat-icon>
+              </button>
             </div>
 
-            <!-- Attached files -->
-            <div *ngIf="msg.uid !== user.uid" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
-              <!-- File-->
-              <button mat-stroked-button color="primary" matTooltip="Click to download attached file."
-                matTooltipPosition="below">
-                <mat-icon>insert_drive_file</mat-icon>
-                Testfile1.pdf
-              </button>
-              <button mat-stroked-button color="primary" matTooltip="Click to download attached file."
-                matTooltipPosition="below">
-                <mat-icon>insert_drive_file</mat-icon>
-                Testfile1laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
-              </button>
-            </div>
-          </mat-card-content>
+            <h6 *ngIf="hasAttachments()">Attachments:</h6>
 
-        </mat-card>
-        <!-- "is typing" Message-->
-        <mat-card *ngIf="showTyping(chat.typing, user.uid)"
-          [ngStyle]="{'background-color': 'lightgrey', 'color': 'black', 'margin': '8px'}">
-          {{ getTypingUsersById(chat.typing, user.uid) }}
-        </mat-card>
-      </div>
-
-      <!-- Send form -->
-      <mat-card [formGroup]="chatForm">
-        <mat-card-content>
-          <div fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center">
-            <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px-8px-8px)">
-              <textarea matInput placeholder="Message" formControlName="message"></textarea>
-            </mat-form-field>
-
-            <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
-              <mat-icon>send</mat-icon>
-            </button>
-
-            <input #fileInput style="display: none;" id="input-file-id" multiple type="file"
-              (change)="setSelectedFiles($event)" />
-            <button mat-fab color="accent" (click)="fileInput.click()">
-              <mat-icon>attach_file</mat-icon>
-            </button>
-          </div>
-
-          <h6 *ngIf="hasAttachments()">Attachments:</h6>
-
-          <div fxLayout="row" style="width: 900px;" fxLayoutGap="8px" fxLayoutAlign="center center" matTooltip="These files will be uploaded as a attachment for the message above." matTooltipPosition="below">
-            <div>
-              <button *ngFor="let attachment of getAttachments(); let i = index" mat-stroked-button color="primary" disabled>
+            <mat-chip-list #chipList style="width: 100%; margin-bottom: 8px;" fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="start center"
+              matTooltip="These files will be uploaded as a attachment for the message above."
+              matTooltipPosition="below">
+              <mat-chip *ngFor="let attachment of getAttachments(); let i = index" selected removable
+                (removed)="deleteAttachment(attachment)" color="primary">
                 <mat-icon>insert_drive_file</mat-icon>
                 {{attachment.name}}
-              </button>
-              <mat-progress-bar mode="determinate" value="getUploadPercentage(i) | async"></mat-progress-bar>
-            </div>
+                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
+              </mat-chip>
+            </mat-chip-list>
 
-          </div>
-        </mat-card-content>
+            <mat-progress-bar *ngIf="getAttachments().length > 0" mode="determinate" value="getUploadPercentage(i) | async"></mat-progress-bar>
+
+          </mat-card-content>
 
 
-      </mat-card>
+        </mat-card>
+      </div>
     </div>
+
 
   </ng-container>
 </ng-container>

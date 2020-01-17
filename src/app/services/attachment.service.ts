@@ -51,6 +51,11 @@ export class AttachmentService {
         this.filesAsArray = Array.from(selectedFiles)
     }
 
+    deleteFile(file) {
+        this.files.delete(file)
+        this.filesAsArray =this.filesAsArray.filter(item => item !== file)
+    }
+
     getUploadPercentages() {
         return this.uploadPercentages
     }

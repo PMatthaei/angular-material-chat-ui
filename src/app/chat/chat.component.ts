@@ -142,6 +142,10 @@ export class ChatComponent implements OnInit {
     this.as.setSelectedFiles(event)
   }
 
+  deleteAttachment(file){
+    return this.as.deleteFile(file)
+  }
+
   getAttachments(){
     return this.as.getFiles()
   }
