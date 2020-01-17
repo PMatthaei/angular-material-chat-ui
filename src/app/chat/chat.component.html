@@ -1,20 +1,19 @@
 <ng-container *ngIf="chat$ | async as chat">
   <ng-container *ngIf=" auth.user$ | async as user">
+
     <div fxLayout="column" style="height:100%">
       <!-- Navbar -->
       <mat-toolbar color="primary" fxFlex="64px">
-        <span>Asset Chat - {{ chat.id }}</span>
+        <span>Asset Chat<span *ngIf="chat.id"> - {{ chat.id }}</span></span>
         <span style="flex: 1 1 auto;"></span>
-        <button mat-button routerLink="/" style="font-size: 20px;">Back to chats</button>
+        <button mat-button routerLink="/" style="font-size: 20px;">Back</button>
       </mat-toolbar>
       <!-- Chat container-->
       <div style="width: 100%; display: flex; flex-direction: column; align-items: center" fxFlex="calc(100%-64px)">
         <!-- Chat component-->
-        <div
-          style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
+        <div style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
           <!-- Message-->
-          <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
-            style="width: 600px; box-shadow: none; background-color: transparent;"
+          <mat-card *ngFor="let msg of messages; trackBy: trackByCreated; let i = index" style="width: 75%; box-shadow: none; background-color: transparent;"
             [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
             <!-- Message Header -->
             <mat-card-header [ngStyle]="{
@@ -24,7 +23,7 @@
                 [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
               <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
                 {{ getUserName(msg.user) }}</mat-card-title>
-              <mat-card-subtitle>{{ getCreatedDate(msg) }}</mat-card-subtitle>
+              <mat-card-subtitle style="margin-bottom: 4px;">{{ getCreatedDate(msg) }}</mat-card-subtitle>
             </mat-card-header>
             <mat-card-content style="display: inline-flex; flex-direction: column; width: 100%;">
               <!-- Message content-->
@@ -36,15 +35,17 @@
                 'border-top-right-radius': msg.uid !== user.uid ? '0px': '4px',
                 'border-top-left-radius': msg.uid === user.uid ? '0px': '4px',
                 'min-width': '150px',
-                'margin-bottom': '8px' }">
-                {{ msg.content }}
+                'max-width': '100%',
+                'margin-bottom': '8px',
+                'padding': '12px'}">
+                <span style="overflow-wrap: break-word;">{{ msg.content }}</span>
               </mat-card>
 
-              <div [ngStyle]="{
-              'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
-              'margin-bottom': '8px'}">
-                <button mat-stroked-button>REPLY</button>
-              </div>
+                <button [ngStyle]="{
+                  'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
+                  'margin-bottom': '8px',
+                  'font-size': '10px',
+                  'line-height': '18px'}" mat-stroked-button>REPLY</button>
 
               <!-- Attached files -->
               <mat-chip-list 
@@ -73,7 +74,8 @@
         <mat-card [formGroup]="chatForm" style="width: 50%; min-width: 600px; margin-bottom: 8px">
           <mat-card-content>
             <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
-              <mat-form-field fxFlex="calc(900px-56px-56px-16px-16px-8px-8px)">
+              <!-- TODO: Better layout of form controls -->
+              <mat-form-field fxFlex="calc(100%-56px-56px-16px-16px-8px-8px)">
                 <textarea matInput placeholder="Message" formControlName="message"></textarea>
               </mat-form-field>
 
@@ -110,7 +112,6 @@
         </mat-card>
       </div>
     </div>
-
 
   </ng-container>
 </ng-container>
