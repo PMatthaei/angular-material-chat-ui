@@ -1,4 +1,4 @@
-# Angular Material Chat UI - Developing
+# Angular Material Chat-UI - Developing
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
