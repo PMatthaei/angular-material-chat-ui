@@ -14,9 +14,16 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - uses: actions/setup-node@master
-    - uses: actions/cache@v1
       with:
         node-version: '10.x'
+    - uses: actions/cache@v1
+      with:
+        path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     - run: npm install
     - run: npm run build
     - uses: w9jds/firebase-action@master
