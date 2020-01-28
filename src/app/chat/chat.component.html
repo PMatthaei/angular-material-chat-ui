@@ -22,6 +22,7 @@
               <!-- Message Header -->
               <mat-card-header [ngStyle]="{
               'justify-content': 'flex-start',
+              'margin-bottom': '8px',
               'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
                 <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
                   [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
