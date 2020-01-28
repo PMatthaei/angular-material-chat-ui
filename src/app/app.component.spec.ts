@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'sample-firestore-angular'`, () => {
+  it(`should have as title 'angular-material-chat-ui'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('sample-firestore-angular');
+    expect(app.title).toEqual('angular-material-chat-ui');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('sample-firestore-angular app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('angular-material-chat-ui app is running!');
   });
 });
