@@ -130,7 +130,7 @@ export class ChatComponent implements OnInit {
     if (!user) {
       return null
     }
-    return user.realName ? user.realName : user.name;
+    return user.realName ? user.realName : user.displayName;
   }
 
   getNow() {

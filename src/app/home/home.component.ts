@@ -17,6 +17,6 @@ export class HomeComponent implements OnInit {
   }
 
   getUserName(user) {
-    return user.displayName;
+    return user.realName ? user.realName : user.displayName;
   }
 }

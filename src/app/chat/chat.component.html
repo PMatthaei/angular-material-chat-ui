@@ -9,9 +9,9 @@
         <button mat-button routerLink="/" style="font-size: 20px;">Back</button>
       </mat-toolbar>
       <!-- Chat container-->
-      <div style="width: 100%; display: flex; flex-direction: column; align-items: center" fxFlex="calc(100%-64px)">
+      <div fxLayout="column" style="width: 100%; display: flex; flex-direction: column; align-items: center" fxFlex="calc(100%-64px)">
         <!-- Chat component-->
-        <div
+        <div fxFlex="calc(100%-125px)"
           style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
           <!-- Message-->
           <ng-container *ngFor="let msg of messages; trackBy: trackByCreated; let i = index">
@@ -78,7 +78,7 @@
         </div>
 
         <!-- Send form -->
-        <mat-card [formGroup]="chatForm" style="width: 50%; min-width: 600px; margin-bottom: 8px">
+        <mat-card [formGroup]="chatForm" style="width: 50%; min-width: 600px; min-height: 125px; margin-bottom: 8px">
           <mat-card-content>
             <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
               <!-- TODO: Better layout of form controls -->
@@ -93,7 +93,7 @@
               <input #fileInput style="display: none;" id="input-file-id" multiple type="file"
                 (change)="setSelectedFiles($event)" />
 
-              <button mat-fab color="accent" (click)="fileInput.click()">
+              <button mat-fab color="accent" disabled (click)="fileInput.click()">
                 <mat-icon>attach_file</mat-icon>
               </button>
             </div>
