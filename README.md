@@ -17,6 +17,7 @@ Since very few angular libraries offer a standalone chat UI, I felt to fill this
 - Message file attachments
 - Invite users to chats
 - Support for Firebase
+- Anonymous chat
 
 ## 2. Backend Interfaces - How to connect your backend
 ### 2.1 Firebase
