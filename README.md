@@ -56,13 +56,8 @@ Upcoming
 ## 3. Theming <a name="theming"></a>
 
 ## 4. Future <a name="future"></a>
-- Test!
-- Dynamic history loading
-- Camera Image attachments
-- Camera Video attachments
-- Audio attachments
-- Subthreads/Reply functionality
-- Quote functionality
+
+Visit the [Kanban Board](https://github.com/PMatthaei/angular-material-chat-ui/projects/1) for the current state.
 
 ## 5. Participation <a name="participation"></a>
 
