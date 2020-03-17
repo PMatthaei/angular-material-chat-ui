@@ -5,36 +5,57 @@ A rich angular framework for chat user interfaces using material design.
 Since very few angular libraries offer a standalone chat UI, I felt to fill this void with a component which will serve a chat interface based on [angular material](https://material.angular.io/) components. 
 # Overview
 
-[1. Features](#1---features)
+[1. Features](#features)
 
-[2. Backend Interfaces](#2---backend-interfaces)
+[1.1. Chat Message History](#chat-message-history)
 
-[3. Theming](#3---theming)
+[1.2. Date Divider](#date-divider)
 
-[4. Future](#4---future)
+[1.3. File attachments](#file-attachments)
 
-[5. Participation](#5---participation)
+[1.4. Invites](#invites)
 
-# 1 - Features
-- Chat message history
-- Date dividers between messages
-- Message file attachments
-- Invite users to chats
-- Support for Firebase
-- Anonymous chat
+[1.5. Anonymous chatting](#anonymous)
 
-## 2 - Backend Interfaces
-### Firebase
+
+[2. Backend Interfaces](#backend)
+
+[2.1. Firebase](#firebase)
+
+[2.2. Write your own API](#api)
+
+
+[3. Theming](#theming)
+
+[4. Future](#future)
+
+[5. Participation](#participation)
+
+# 1. Features <a name="features"></a>
+
+## 1.1. Message history <a name="chat-message-history"></a>
+
+## 1.2. Date dividers <a name="date-divider"></a>
+
+## 1.3. File attachments <a name="file-attachments"></a>
+
+## 1.4. Invites <a name="invites"></a>
+
+## 1.7. Anonymous chatting <a name="anonymous"></a>
+
+## 2. Backend Interfaces <a name="backend"></a>
+
+### 2.1. Firebase <a name="firebase"></a>
 
 Upcoming
 
-### Write your own API
+### 2.2. Write your own API  <a name="api"></a>
 
 Upcoming
 
-## 3 - Theming
+## 3. Theming <a name="theming"></a>
 
-## 4 - Future
+## 4. Future <a name="future"></a>
 - Test!
 - Dynamic history loading
 - Camera Image attachments
@@ -43,6 +64,6 @@ Upcoming
 - Subthreads/Reply functionality
 - Quote functionality
 
-## 5 - Participation
+## 5. Participation <a name="participation"></a>
 
 Upcoming...
