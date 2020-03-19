@@ -17,7 +17,6 @@ Since very few angular libraries offer a standalone chat UI, I felt to fill this
 
 [1.5. NgRx Integration](#nrgx)
 
-Visit [NgRx](https://ngrx.io/)
 
 [2. Backend Interfaces](#backend)
 
@@ -42,7 +41,9 @@ Visit [NgRx](https://ngrx.io/)
 
 ## 1.4. Invites <a name="invites"></a>
 
-## 1.7. Anonymous chatting <a name="nrgx"></a>
+## 1.5. NgRx Integration <a name="nrgx"></a>
+
+Visit [NgRx](https://ngrx.io/)
 
 ## 2. Backend Interfaces <a name="backend"></a>
 
