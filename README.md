@@ -63,4 +63,6 @@ Visit the [Kanban Board](https://github.com/PMatthaei/angular-material-chat-ui/p
 
 ## 5. Participation <a name="participation"></a>
 
+[Setup Guide](https://github.com/PMatthaei/angular-material-chat-ui/blob/master/DEVELOPING.md)
+
 Upcoming...
