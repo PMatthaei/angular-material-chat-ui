@@ -48,7 +48,7 @@ export class ChatComponent implements OnInit {
     return (
       message.content === newMessage.content &&
       message.uid === newMessage.uid &&
-      message.createdAt === newMessage.createdAt
+      message.createdAt.isSame(newMessage.createdAt)
     );
   }
 

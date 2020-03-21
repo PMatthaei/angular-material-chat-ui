@@ -2,7 +2,6 @@ import { Injectable, Optional } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { FirebaseAuthService } from './firebase-auth.service';
 import { Router } from '@angular/router';
-import { firestore } from 'firebase/app';
 import { map, tap, switchMap, flatMap } from 'rxjs/operators';
 import { Observable, combineLatest, of, merge } from 'rxjs';
 import { catchError } from 'rxjs/operators';
@@ -11,6 +10,9 @@ import { ChatBaseService } from '../chat-base.service';
 import { Message } from '../../model/message';
 import { Chat } from '../../model/chat';
 import { ServicesConfig } from '../services-config';
+import * as moment from 'moment';
+import * as firebase from 'firebase/app';
+import 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +31,7 @@ export class FirebaseChatService extends ChatBaseService {
 
   getHistory(chatId: string): Observable<any> {
     return this.afs
-      .collection<any>('chats')
+      .collection<Chat>('chats')
       .doc(chatId)
       .snapshotChanges()
       .pipe(
@@ -74,8 +76,8 @@ export class FirebaseChatService extends ChatBaseService {
     const { uid } = await this.auth.getUser();
 
     // Init new chat data
-    const data = {
-      createdAt: Date.now(),
+    const data: Chat = {
+      createdAt: firebase.firestore.Timestamp.now(),
       count: 0,
       messages: [],
       participants: [],
@@ -96,7 +98,7 @@ export class FirebaseChatService extends ChatBaseService {
     if (uid) {
       const ref = this.afs.collection('chats').doc(chatId);
       return ref.update({
-        typing: firestore.FieldValue.arrayUnion(uid)
+        typing: firebase.firestore.FieldValue.arrayUnion(uid)
       });
     }
   }
@@ -107,7 +109,7 @@ export class FirebaseChatService extends ChatBaseService {
     if (uid) {
       const ref = this.afs.collection('chats').doc(chatId);
       return ref.update({
-        typing: firestore.FieldValue.arrayRemove(uid)
+        typing: firebase.firestore.FieldValue.arrayRemove(uid)
       });
     }
   }
@@ -118,13 +120,13 @@ export class FirebaseChatService extends ChatBaseService {
     const data = {
       uid,
       content,
-      createdAt: Date.now()
+      createdAt: firebase.firestore.Timestamp.now(),
     };
 
     if (uid) {
       const ref = this.afs.collection('chats').doc(chatId);
       return ref.update({
-        messages: firestore.FieldValue.arrayUnion(data)
+        messages: firebase.firestore.FieldValue.arrayUnion(data)
       });
     }
   }
@@ -136,7 +138,7 @@ export class FirebaseChatService extends ChatBaseService {
     if (chat.uid === uid || msg.uid === uid) {
       delete msg.user;
       return ref.update({
-        messages: firestore.FieldValue.arrayRemove(msg)
+        messages: firebase.firestore.FieldValue.arrayRemove(msg)
       });
     }
   }
@@ -158,7 +160,7 @@ export class FirebaseChatService extends ChatBaseService {
         this.buildUserDictionary(users);
         // Augment message data with newly fetched user data
         chat.messages = chat.messages.map((message: any) => {
-          return { ...message, user: this.userDictionary[message.uid] };
+          return { ...message, createdAt: moment(message.createdAt.toDate()), user: this.userDictionary[message.uid] };
         });
         return chat;
       })
