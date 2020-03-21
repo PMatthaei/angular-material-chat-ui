@@ -1,0 +1,10 @@
+<mat-card
+        *ngIf="showTyping(typing, user.uid)"
+        [ngStyle]="{
+              'background-color': 'lightgrey',
+              color: 'black',
+              margin: '8px'
+            }"
+>
+    {{ getTypingUsersById(typing, user.uid) }}
+</mat-card>
