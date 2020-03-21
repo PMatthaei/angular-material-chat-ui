@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import { map, tap, switchMap, flatMap } from 'rxjs/operators';
 import { Observable, combineLatest, of, merge } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from '../../model/User';
+import { User } from '../../model/user';
 import { ChatBaseService } from '../chat-base.service';
 import { Message } from '../../model/message';
 import { Chat } from '../../model/chat';
@@ -50,15 +50,7 @@ export class FirebaseChatService extends ChatBaseService {
             ref.where('participants', 'array-contains', user.uid)
           )
           .snapshotChanges();
-        const ownedChats = this.afs
-          .collection('chats', ref => ref.where('ownerId', '==', user.uid))
-          .snapshotChanges();
-        return combineLatest(participatingChats, ownedChats).pipe(
-          // tslint:disable-next-line:no-shadowed-variable
-          map(([participatingChats, ownedChats]) => [
-            ...participatingChats,
-            ...ownedChats
-          ]),
+        return participatingChats.pipe(
           map(actions => {
             return actions.map(a => {
               const chatData: any = a.payload.doc.data();
@@ -80,7 +72,7 @@ export class FirebaseChatService extends ChatBaseService {
       createdAt: firebase.firestore.Timestamp.now(),
       count: 0,
       messages: [],
-      participants: [],
+      participants: [uid],
       ownerId: uid,
       typing: []
     };

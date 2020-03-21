@@ -1,4 +1,4 @@
-import { User } from './User';
+import { User } from './user';
 import { Moment } from 'moment';
 
 export interface Attachment {

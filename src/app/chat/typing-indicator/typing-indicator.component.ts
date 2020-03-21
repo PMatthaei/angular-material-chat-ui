@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FirebaseChatService } from '../../services/firebase/firebase-chat.service';
-import { User } from '../../model/User';
+import { User } from '../../model/user';
 
 @Component({
   selector: 'app-typing-indicator',

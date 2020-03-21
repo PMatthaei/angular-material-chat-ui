@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Message } from '../../model/message';
-import { User } from '../../model/User';
+import { User } from '../../model/user';
 import * as moment from 'moment';
 
 @Component({
@@ -30,7 +30,7 @@ export class ChatMessageComponent implements OnInit {
     if (!user) {
       return null;
     }
-    return user.realName ? user.realName : user.displayName;
+    return user.displayName;
   }
 
   getCreatedDate(msg: Message): string {
