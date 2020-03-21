@@ -1,126 +1,47 @@
 <ng-container *ngIf="chat$ | async as chat">
-  <ng-container *ngIf=" auth.user$ | async as user">
-
-    <div fxLayout="column" style="height:100%">
+  <ng-container *ngIf="auth.user$ | async as user">
+    <!-- Chat container-->
+    <div
+      fxLayout="column"
+      fxLayoutAlign="center center"
+      style="width: 50%; min-width: 600px; height: 100%;"
+    >
       <!-- Navbar -->
       <mat-toolbar color="primary" fxFlex="64px">
-        <span>Asset Chat<span *ngIf="chat.id"> - {{ chat.id }}</span></span>
+        <span
+          >Asset Chat<span *ngIf="chat.id"> - {{ chat.id }}</span></span
+        >
         <span style="flex: 1 1 auto;"></span>
-        <button mat-button routerLink="/" style="font-size: 20px;">Back</button>
+        <button mat-button routerLink="/" style="font-size: 20px;">
+          Back
+        </button>
       </mat-toolbar>
-      <!-- Chat container-->
-      <div fxLayout="column" style="width: 100%; display: flex; flex-direction: column; align-items: center" fxFlex="calc(100%-64px)">
-        <!-- Chat component-->
-        <div fxFlex="calc(100%-125px)"
-          style="width: 50%; min-width: 600px; overflow-y: scroll; display: flex; flex-direction: column; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);">
-          <!-- Message-->
-          <ng-container *ngFor="let msg of messages; trackBy: trackByCreated; let i = index">
-            <mat-chip style="width: fit-content; align-self: center; margin: 8px" *ngIf="isPreviousMessageFromOtherDay(i)" color="accent" selected removable="false">{{ getDateDivider(msg) }}</mat-chip>
-            <mat-card 
-              style="width: 75%; box-shadow: none; background-color: transparent;"
-              [ngStyle]="{ 'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
-              <!-- Message Header -->
-              <mat-card-header [ngStyle]="{
-              'justify-content': 'flex-start',
-              'margin-bottom': '8px',
-              'flex-direction': msg.uid !== user.uid ? 'row-reverse' : 'row' }">
-                <img *ngIf="isPreviousMessageFromSameAuthor(i)" mat-card-avatar
-                  [src]="msg.user?.photoURL || 'assets/account.png'" width="50px">
-                <mat-card-title *ngIf="isPreviousMessageFromSameAuthor(i)" style="font-size: 16px; margin-bottom: 6px;">
-                  {{ getUserName(msg.user) }}</mat-card-title>
-                <mat-card-subtitle style="margin-bottom: 4px;">{{ getCreatedDate(msg) }}</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content style="display: inline-flex; flex-direction: column; width: 100%;">
-                <!-- Message content-->
-                <mat-card [ngStyle]="{
-                'background-color':msg.uid !== user.uid ? 'lightslategrey' : '#536DFE', 
-                'color':msg.uid !== user.uid ? 'white' : 'white',
-                'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
-                'text-align': msg.uid !== user.uid ? 'end' : 'start',
-                'border-top-right-radius': msg.uid !== user.uid ? '0px': '4px',
-                'border-top-left-radius': msg.uid === user.uid ? '0px': '4px',
-                'min-width': '150px',
-                'max-width': '100%',
-                'margin-bottom': '8px',
-                'padding': '12px'}">
-                  <span style="overflow-wrap: break-word;">{{ msg.content }}</span>
-                </mat-card>
 
-                <button [ngStyle]="{
-                  'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
-                  'margin-bottom': '8px',
-                  'font-size': '10px',
-                  'line-height': '18px'}" mat-stroked-button>REPLY</button>
+      <!-- Chat component-->
+      <div
+        fxLayout="column"
+        style="width: 100%; overflow-y: scroll; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);"
+      >
+        <!-- Messages-->
+        <ng-container
+          *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
+        >
+          <app-chat-message
+            [msg]="msg"
+            [predecessor]="i - 1 >= 0 ? this.messages[i - 1] : null"
+            [user]="user"
+          ></app-chat-message>
+        </ng-container>
 
-                <!-- Attached files -->
-                <mat-chip-list
-                  [ngStyle]="{ 'display': 'flex', 'justify-content': msg.uid !== user.uid ? 'flex-end' : 'flex-start' }">
-                  <mat-chip selected color="primary">
-                    <mat-icon>insert_drive_file</mat-icon>
-                    Testfile1laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
-                  </mat-chip>
-                  <mat-chip selected color="primary">
-                    <mat-icon>insert_drive_file</mat-icon>
-                    Testfile1.pdf
-                  </mat-chip>
-                </mat-chip-list>
-
-              </mat-card-content>
-
-            </mat-card>
-          </ng-container>
-
-          <!-- "is typing" Message-->
-          <mat-card *ngIf="showTyping(chat.typing, user.uid)"
-            [ngStyle]="{'background-color': 'lightgrey', 'color': 'black', 'margin': '8px'}">
-            {{ getTypingUsersById(chat.typing, user.uid) }}
-          </mat-card>
-        </div>
-
-        <!-- Send form -->
-        <mat-card [formGroup]="chatForm" style="width: 50%; min-width: 600px; min-height: 125px; margin-bottom: 8px">
-          <mat-card-content>
-            <div fxLayout="row" fxLayoutGap="8px" fxLayoutAlign="center center">
-              <!-- TODO: Better layout of form controls -->
-              <mat-form-field fxFlex="calc(100%-56px-56px-16px-16px-8px-8px)">
-                <textarea matInput placeholder="Message" formControlName="message"></textarea>
-              </mat-form-field>
-
-              <button mat-fab color="primary" (click)="submit(chat.id)" [disabled]="!chatForm.get('message').value">
-                <mat-icon>send</mat-icon>
-              </button>
-
-              <input #fileInput style="display: none;" id="input-file-id" multiple type="file"
-                (change)="setSelectedFiles($event)" />
-
-              <button mat-fab color="accent" disabled (click)="fileInput.click()">
-                <mat-icon>attach_file</mat-icon>
-              </button>
-            </div>
-
-            <h6 *ngIf="hasAttachments()">Attachments:</h6>
-
-            <mat-chip-list #chipList style="width: 100%; margin-bottom: 8px;" fxLayout="row" fxLayoutGap="8px"
-              fxLayoutAlign="start center"
-              matTooltip="These files will be uploaded as a attachment for the message above."
-              matTooltipPosition="below">
-              <mat-chip *ngFor="let attachment of getAttachments(); let i = index" selected removable
-                (removed)="deleteAttachment(attachment)" color="primary">
-                <mat-icon>insert_drive_file</mat-icon>
-                {{attachment.name}}
-                <mat-icon matChipRemove *ngIf="true">cancel</mat-icon>
-              </mat-chip>
-            </mat-chip-list>
-
-            <mat-progress-bar *ngIf="getAttachments().length > 0" mode="determinate"
-              value="getUploadPercentage(i) | async"></mat-progress-bar>
-
-          </mat-card-content>
-
-
-        </mat-card>
+        <!-- "is typing" Indicator-->
+        <app-typing-indicator
+          [user]="user"
+          [typing]="chat.typing"
+        ></app-typing-indicator>
       </div>
-    </div>
 
+      <!-- Send form and other controls -->
+      <app-chat-controls style="width: 100%;" [chatId]="chat.id"></app-chat-controls>
+    </div>
   </ng-container>
 </ng-container>

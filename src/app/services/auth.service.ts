@@ -23,10 +23,20 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap(user => {
         if (user) {
-          const publicUserData = this.afs.doc(`users/${user.uid}`).valueChanges();
-          const secureUserData = this.afs.doc(`users/${user.uid}`).collection('secureData').valueChanges().pipe(catchError(err => of({})));
-          return combineLatest(publicUserData, secureUserData)
-            .pipe(map(([publicData, secureData]) => ({ ...publicData as {}, ...secureData[0] })))
+          const publicUserData = this.afs
+            .doc(`users/${user.uid}`)
+            .valueChanges();
+          const secureUserData = this.afs
+            .doc(`users/${user.uid}`)
+            .collection('secureData')
+            .valueChanges()
+            .pipe(catchError(err => of({})));
+          return combineLatest(publicUserData, secureUserData).pipe(
+            map(([publicData, secureData]) => ({
+              ...(publicData as {}),
+              ...secureData[0]
+            }))
+          );
         } else {
           return of(null);
         }

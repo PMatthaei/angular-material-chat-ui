@@ -14,7 +14,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ChatComponent } from './chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { environment } from '../environments/environment';
-import {NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArrayFilterUidPipe } from './array-filter-uid.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
@@ -33,10 +33,20 @@ import {
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatRippleModule } from '@angular/material/core';
-
+import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
+import { TypingIndicatorComponent } from './chat/typing-indicator/typing-indicator.component';
+import { ChatControlsComponent } from './chat/chat-controls/chat-controls.component';
 
 @NgModule({
-  declarations: [AppComponent, ChatComponent, HomeComponent, ArrayFilterUidPipe],
+  declarations: [
+    AppComponent,
+    ChatComponent,
+    HomeComponent,
+    ArrayFilterUidPipe,
+    ChatMessageComponent,
+    TypingIndicatorComponent,
+    ChatControlsComponent
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -59,7 +69,7 @@ import { MatRippleModule } from '@angular/material/core';
     FlexLayoutModule,
     AngularFireStorageModule,
     HttpClientModule,
-    BrowserAnimationsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

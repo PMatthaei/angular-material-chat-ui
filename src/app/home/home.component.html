@@ -1,48 +1,62 @@
 <mat-toolbar>
   <span>Angular Material Chat</span>
   <span style="flex: 1 1 auto;flex: 1 1 auto;"></span>
-  <button *ngIf=" auth.user$ | async as user;" mat-raised-button color="secondary" (click)="auth.signOut()">Sign Out</button>
+  <button
+    *ngIf="auth.user$ | async as user"
+    mat-raised-button
+    color="secondary"
+    (click)="auth.signOut()"
+  >
+    Sign Out
+  </button>
 </mat-toolbar>
 
 <div class="login">
-  <div *ngIf=" auth.user$ | async as user; else login">
-
+  <div *ngIf="auth.user$ | async as user; else login">
     <mat-card style="width: 20%; margin: 16px auto;">
       <mat-card-header>
-        <img mat-card-avatar [src]="user.photoURL" width="50px">
+        <img mat-card-avatar [src]="user.photoURL" width="50px" />
         <mat-card-title>{{ getUserName(user) }}</mat-card-title>
         <mat-card-subtitle>Welcome to Angular Material Chat!</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
+          The Shiba Inu is the smallest of the six original and distinct spitz
+          breeds of dog from Japan. A small, agile dog that copes very well with
+          mountainous terrain, the Shiba Inu was originally bred for hunting.
         </p>
       </mat-card-content>
       <mat-card-actions>
         <button mat-button>Profile</button>
       </mat-card-actions>
     </mat-card>
-    
-    <hr>
 
-    <button mat-raised-button color="primary" (click)="cs.create()">Create New Chat</button>
+    <hr />
 
-    <hr>
+    <button mat-raised-button color="primary" (click)="cs.create()">
+      Create New Chat
+    </button>
+
+    <hr />
 
     <h3>Chatrooms</h3>
 
     <mat-list role="list">
       <mat-list-item role="listitem" *ngFor="let chat of userChats$ | async">
-        <button mat-stroked-button color="primary" [routerLink]="'chats/' + chat.id">Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat </button>
+        <button
+          mat-stroked-button
+          color="primary"
+          [routerLink]="'chats/' + chat.id"
+        >
+          Asset: {{ chat.id }} - {{ chat.messages.length }} Messages - Chat
+        </button>
       </mat-list-item>
     </mat-list>
-
   </div>
 
   <ng-template #login>
-    <button mat-raised-button color="primary" (click)="auth.googleSignIn()">Login with Google</button>
+    <button mat-raised-button color="primary" (click)="auth.googleSignIn()">
+      Login with Google
+    </button>
   </ng-template>
-
 </div>
