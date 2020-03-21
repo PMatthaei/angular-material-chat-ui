@@ -6,9 +6,10 @@ import { firestore } from 'firebase/app';
 import { map, tap, switchMap, flatMap } from 'rxjs/operators';
 import { Observable, combineLatest, of, merge } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { User } from '../chat/chat.component';
 const dummyUser = {
-  displayName: "Anonymous",
-}
+  displayName: 'Anonymous'
+};
 @Injectable({
   providedIn: 'root'
 })
@@ -20,9 +21,7 @@ export class ChatService {
     private afs: AngularFirestore,
     private auth: AuthService,
     private router: Router
-  ) {
-
-  }
+  ) {}
 
   get(chatId: string) {
     return this.afs
@@ -31,7 +30,7 @@ export class ChatService {
       .snapshotChanges()
       .pipe(
         map(doc => {
-          const data: Object = doc.payload.data();
+          const data: any = doc.payload.data();
           return { id: doc.payload.id, ...data };
         })
       );
@@ -40,19 +39,27 @@ export class ChatService {
   getUserChats() {
     return this.auth.user$.pipe(
       switchMap(user => {
-        const participatingChats = this.afs.collection('chats', ref => ref.where('participants', 'array-contains', user.uid)).snapshotChanges();
-        const ownedChats = this.afs.collection('chats', ref => ref.where('ownerId', '==', user.uid)).snapshotChanges();
-        return combineLatest(participatingChats, ownedChats)
-          .pipe(
-            map(([participatingChats, ownedChats]) => { return [ ...participatingChats , ...ownedChats ] }),
-            map(actions => {
-              return actions.map(a => {
-                const chatData: Object = a.payload.doc.data();
-                const id = a.payload.doc.id;
-                return { id, ...chatData };
-              });
-            })
-          );
+        const participatingChats = this.afs
+          .collection('chats', ref =>
+            ref.where('participants', 'array-contains', user.uid)
+          )
+          .snapshotChanges();
+        const ownedChats = this.afs
+          .collection('chats', ref => ref.where('ownerId', '==', user.uid))
+          .snapshotChanges();
+        return combineLatest(participatingChats, ownedChats).pipe(
+          // tslint:disable-next-line:no-shadowed-variable
+          map(([participatingChats, ownedChats]) => {
+            return [...participatingChats, ...ownedChats];
+          }),
+          map(actions => {
+            return actions.map(a => {
+              const chatData: any = a.payload.doc.data();
+              const id = a.payload.doc.id;
+              return { id, ...chatData };
+            });
+          })
+        );
       })
     );
   }
@@ -136,7 +143,9 @@ export class ChatService {
       switchMap(c => {
         chat = c;
         // Get all users in the chat -> find user data since only uid is known
-        const uids = Array.from(new Set(c.messages.map((message: any) => message.uid)));
+        const uids = Array.from(
+          new Set(c.messages.map((message: any) => message.uid))
+        );
         const users = this.fetchUsers(uids);
         return users.length ? combineLatest(users) : of([]);
       }),
@@ -147,23 +156,31 @@ export class ChatService {
           return { ...message, user: this.userDictionary[message.uid] };
         });
         return chat;
-      }));
+      })
+    );
   }
 
   private buildUserDictionary(users: unknown[]) {
-    users.forEach(user => (this.userDictionary[(<any>user).uid] = user));
+    users.forEach(user => (this.userDictionary[(user as User).uid] = user));
   }
 
   private fetchUsers(uids: unknown[]): Observable<any>[] {
     return uids.map(uid => {
       const publicUserData = this.afs.doc(`users/${uid}`).valueChanges();
-      const secureUserData = this.afs.doc(`users/${uid}`).collection('secureData').valueChanges().pipe(catchError(err => of({})));
-      return combineLatest(publicUserData, secureUserData)
-        .pipe(map(([publicData, secureData]) => { return { ...publicData as {}, ...secureData[0] } }))
-    })
+      const secureUserData = this.afs
+        .doc(`users/${uid}`)
+        .collection('secureData')
+        .valueChanges()
+        .pipe(catchError(err => of({})));
+      return combineLatest(publicUserData, secureUserData).pipe(
+        map(([publicData, secureData]) => {
+          return { ...(publicData as {}), ...secureData[0] };
+        })
+      );
+    });
   }
 
   getUserById(typerId) {
-    return this.userDictionary[typerId]
+    return this.userDictionary[typerId];
   }
 }

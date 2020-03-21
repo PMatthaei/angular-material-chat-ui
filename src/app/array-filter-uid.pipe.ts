@@ -4,7 +4,6 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'filterUid'
 })
 export class ArrayFilterUidPipe implements PipeTransform {
-
   transform(value: any, ...args: any[]): any {
     if (!value || !args) {
       return value;
@@ -12,11 +11,9 @@ export class ArrayFilterUidPipe implements PipeTransform {
     // filter items array, items which match and return true will be
     // kept, false will be filtered out
 
-    return value.filter(item => item != args[0]);
+    return value.filter(item => item !== args[0]);
   }
-
 }
-
 
 /*import { Pipe, PipeTransform } from '@angular/core';
 
