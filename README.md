@@ -1,5 +1,7 @@
 # Angular Material Chat-UI ![Firebase Continuous Integration - Master Branch](https://github.com/PMatthaei/angular-material-chat-ui/workflows/Firebase%20Continuous%20Integration/badge.svg?branch=master)
 
+[Visit the demo](https://angular-chat-ui.firebaseapp.com)
+
 A rich angular framework for chat user interfaces using material design.
 
 Since very few angular libraries offer a standalone chat UI, I felt to fill this void with a component which will serve a chat interface based on [angular material](https://material.angular.io/) components. 
