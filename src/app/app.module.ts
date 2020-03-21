@@ -36,6 +36,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { ChatMessageComponent } from './chat/chat-message/chat-message.component';
 import { TypingIndicatorComponent } from './chat/typing-indicator/typing-indicator.component';
 import { ChatControlsComponent } from './chat/chat-controls/chat-controls.component';
+import { ChatHeaderComponent } from './chat/chat-header/chat-header.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { ChatControlsComponent } from './chat/chat-controls/chat-controls.compon
     ArrayFilterUidPipe,
     ChatMessageComponent,
     TypingIndicatorComponent,
-    ChatControlsComponent
+    ChatControlsComponent,
+    ChatHeaderComponent
   ],
   imports: [
     BrowserModule,

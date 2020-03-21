@@ -6,16 +6,8 @@
       fxLayoutAlign="center center"
       style="width: 50%; min-width: 600px; height: 100%;"
     >
-      <!-- Navbar -->
-      <mat-toolbar color="primary" fxFlex="64px">
-        <span
-          >Asset Chat<span *ngIf="chat.id"> - {{ chat.id }}</span></span
-        >
-        <span style="flex: 1 1 auto;"></span>
-        <button mat-button routerLink="/" style="font-size: 20px;">
-          Back
-        </button>
-      </mat-toolbar>
+      <!-- Header -->
+      <app-chat-header style="width: 100%;" [chatId]="chat.id" fxFlex="64px"></app-chat-header>
 
       <!-- Chat component-->
       <div
@@ -41,7 +33,10 @@
       </div>
 
       <!-- Send form and other controls -->
-      <app-chat-controls style="width: 100%;" [chatId]="chat.id"></app-chat-controls>
+      <app-chat-controls
+        style="width: 100%;"
+        [chatId]="chat.id"
+      ></app-chat-controls>
     </div>
   </ng-container>
 </ng-container>
