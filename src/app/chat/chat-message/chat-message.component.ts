@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Message, User } from '../chat.component';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-chat-message',
@@ -42,8 +43,14 @@ export class ChatMessageComponent implements OnInit {
     return new Date(msg.createdAt).toLocaleString();
   }
 
-  isPreviousMessageFromSameAuthor() {
-    return this.predecessor && this.predecessor.uid !== this.msg.uid;
+  isNotTemporalClose() {
+    if (!this.predecessor) {
+      return false;
+    }
+    const duration = moment.duration(
+      moment(this.msg.createdAt).diff(moment(this.predecessor.createdAt))
+    );
+    return duration.asMinutes() > 1;
   }
 
   isPreviousMessageFromOtherDay() {
