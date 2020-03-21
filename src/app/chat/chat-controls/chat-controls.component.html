@@ -10,13 +10,14 @@
           matInput
           placeholder="Message"
           formControlName="message"
+          (keydown.enter)="submit()"
         ></textarea>
       </mat-form-field>
 
       <button
         mat-fab
         color="primary"
-        (click)="submit(chatId)"
+        (click)="submit()"
         [disabled]="!chatForm.get('message').value"
       >
         <mat-icon>send</mat-icon>

@@ -5,21 +5,21 @@ import {
   RouterStateSnapshot,
   Router
 } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+
+import { FirebaseAuthService } from './firebase/firebase-auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: FirebaseAuthService, private router: Router) {}
   async canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean> {
     const user = await this.auth.getUser();
     if (!user) {
-      this.router.navigate(['/']);
+      await this.router.navigate(['/']);
     }
     return !!user;
   }

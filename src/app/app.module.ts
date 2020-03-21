@@ -15,7 +15,6 @@ import { ChatComponent } from './chat/chat.component';
 import { HomeComponent } from './home/home.component';
 import { environment } from '../environments/environment';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ArrayFilterUidPipe } from './array-filter-uid.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MatButtonModule,
@@ -37,13 +36,24 @@ import { ChatMessageComponent } from './chat/chat-message/chat-message.component
 import { TypingIndicatorComponent } from './chat/typing-indicator/typing-indicator.component';
 import { ChatControlsComponent } from './chat/chat-controls/chat-controls.component';
 import { ChatHeaderComponent } from './chat/chat-header/chat-header.component';
+import { ServicesModule } from './services/services.module';
+import { ChatBaseService } from './services/chat-base.service';
+import { FirebaseChatService } from './services/firebase/firebase-chat.service';
+
+const config = {
+  firebase: {
+    chat: 'test'
+  },
+  apiEndpoints: {
+    history: 'test'
+  }
+};
 
 @NgModule({
   declarations: [
     AppComponent,
     ChatComponent,
     HomeComponent,
-    ArrayFilterUidPipe,
     ChatMessageComponent,
     TypingIndicatorComponent,
     ChatControlsComponent,
@@ -71,9 +81,10 @@ import { ChatHeaderComponent } from './chat/chat-header/chat-header.component';
     FlexLayoutModule,
     AngularFireStorageModule,
     HttpClientModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ServicesModule.forRoot(config)
   ],
-  providers: [],
+  providers: [FirebaseChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

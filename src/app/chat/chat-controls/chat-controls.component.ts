@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AttachmentService } from '../../services/attachment.service';
-import { ChatService } from '../../services/chat.service';
+import { FirebaseAttachmentService } from '../../services/firebase/firebase-attachment.service';
+import { FirebaseChatService } from '../../services/firebase/firebase-chat.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, filter, throttleTime } from 'rxjs/operators';
 
@@ -15,7 +15,11 @@ export class ChatControlsComponent implements OnInit {
   messageControl: FormControl;
   chatForm: FormGroup;
 
-  constructor(private attachmentService: AttachmentService, private chatService: ChatService, private fb: FormBuilder) {
+  constructor(
+    private attachmentService: FirebaseAttachmentService,
+    private chatService: FirebaseChatService,
+    private fb: FormBuilder
+  ) {
     this.messageControl = new FormControl();
     this.chatForm = this.fb.group({ message: this.messageControl });
   }
@@ -29,7 +33,7 @@ export class ChatControlsComponent implements OnInit {
         throttleTime(1400)
       )
       .subscribe(data => {
-        this.chatService.sendIsTyping(this.chatId);
+        this.chatService.sendIsTyping(this.chatId).then();
       });
 
     this.messageControl.valueChanges
@@ -38,16 +42,16 @@ export class ChatControlsComponent implements OnInit {
         debounceTime(1500)
       )
       .subscribe(data => {
-        this.chatService.deleteIsTyping(this.chatId);
+        this.chatService.deleteIsTyping(this.chatId).then();
       });
   }
 
-  submit(chatId) {
+  submit(): void {
     const msg = this.messageControl.value;
     if (!msg) {
       return alert('Please enter a message.');
     }
-    this.chatService.sendMessage(chatId, msg);
+    this.chatService.sendMessage(this.chatId, msg).then();
     this.attachmentService.uploadAttachments().subscribe(
       res => console.log(res),
       err => console.log(err)
@@ -56,19 +60,19 @@ export class ChatControlsComponent implements OnInit {
     this.scrollBottom();
   }
 
-  private scrollBottom() {
+  private scrollBottom(): void {
     setTimeout(() => window.scrollTo(0, document.body.scrollHeight), 500);
   }
 
-  setSelectedFiles(event) {
+  setSelectedFiles(event): void {
     this.attachmentService.setSelectedFiles(event);
   }
 
-  deleteAttachment(file) {
+  deleteAttachment(file): void {
     return this.attachmentService.deleteFile(file);
   }
 
-  getAttachments() {
+  getAttachments(): File[] {
     return this.attachmentService.getFiles();
   }
 

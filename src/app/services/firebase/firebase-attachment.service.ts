@@ -6,7 +6,7 @@ import { finalize } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class AttachmentService {
+export class FirebaseAttachmentService {
   uploadPercentages: Observable<number>[] = [];
   downloadURL: Observable<string>;
 

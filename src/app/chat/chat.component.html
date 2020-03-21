@@ -9,12 +9,11 @@
       <!-- Header -->
       <app-chat-header style="width: 100%;" [chatId]="chat.id" fxFlex="64px"></app-chat-header>
 
-      <!-- Chat component-->
+      <!-- Messages-->
       <div
         fxLayout="column"
         style="width: 100%; overflow-y: scroll; background-color: lightgray; box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);"
       >
-        <!-- Messages-->
         <ng-container
           *ngFor="let msg of messages; trackBy: trackByCreated; let i = index"
         >
