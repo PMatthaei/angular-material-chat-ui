@@ -18,31 +18,26 @@ export class ChatMessageComponent implements OnInit {
 
   ngOnInit() {}
 
-  getDateDivider(msg): string {
+  getDateDivider(msg: Message): string {
     if (!msg.createdAt) {
       return null;
     }
-    const date = new Date(msg.createdAt);
-    return date.toLocaleDateString('de-DE', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+
+    return msg.createdAt.format('l');
   }
 
-  getUserName(user): string {
+  getUserName(user: User): string {
     if (!user) {
       return null;
     }
     return user.realName ? user.realName : user.displayName;
   }
 
-  getCreatedDate(msg): string {
+  getCreatedDate(msg: Message): string {
     if (!msg.createdAt) {
       return null;
     }
-    return new Date(msg.createdAt).toLocaleString();
+    return msg.createdAt.format('LT');
   }
 
   isNotTemporalClose() {
@@ -50,7 +45,7 @@ export class ChatMessageComponent implements OnInit {
       return true;
     }
     const duration = moment.duration(
-      moment(this.msg.createdAt).diff(moment(this.predecessor.createdAt))
+      this.msg.createdAt.diff(this.predecessor.createdAt)
     );
     return duration.asMinutes() > 1;
   }
@@ -59,9 +54,8 @@ export class ChatMessageComponent implements OnInit {
     if (!this.predecessor) {
       return true;
     }
-    const prevDate = new Date(this.predecessor.createdAt).getDay();
-    const date = new Date(this.msg.createdAt).getDay();
+    const prevDate = this.predecessor.createdAt.day();
+    const date = this.msg.createdAt.day();
     return prevDate !== date;
   }
-
 }
