@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { ChatService } from '../services/chat.service';
+import { FirebaseAuthService } from '../services/firebase/firebase-auth.service';
+import { FirebaseChatService } from '../services/firebase/firebase-chat.service';
 import { tap } from 'rxjs/operators';
 
 @Component({
@@ -10,10 +10,10 @@ import { tap } from 'rxjs/operators';
 })
 export class HomeComponent implements OnInit {
   userChats$;
-  constructor(public auth: AuthService, public cs: ChatService) {}
+  constructor(public auth: FirebaseAuthService, public cs: FirebaseChatService) {}
 
   ngOnInit() {
-    this.userChats$ = this.cs.getUserChats();
+    this.userChats$ = this.cs.getParticipatingChats();
   }
 
   getUserName(user) {

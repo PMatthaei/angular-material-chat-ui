@@ -12,21 +12,21 @@ import { Observable, of, combineLatest } from 'rxjs';
 import { switchMap, first, map, catchError } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class FirebaseAuthService {
   user$: Observable<any>;
 
   constructor(
-    private afAuth: AngularFireAuth,
-    private afs: AngularFirestore,
+    private angularFireAuth: AngularFireAuth,
+    private angularFirestore: AngularFirestore,
     private router: Router
   ) {
-    this.user$ = this.afAuth.authState.pipe(
-      switchMap(user => {
+    this.user$ = this.angularFireAuth.authState.pipe(
+      switchMap((user: firebase.User) => {
         if (user) {
-          const publicUserData = this.afs
+          const publicUserData = this.angularFirestore
             .doc(`users/${user.uid}`)
             .valueChanges();
-          const secureUserData = this.afs
+          const secureUserData = this.angularFirestore
             .doc(`users/${user.uid}`)
             .collection('secureData')
             .valueChanges()
@@ -54,12 +54,12 @@ export class AuthService {
   }
 
   private async oAuthLogin(provider) {
-    const credential = await this.afAuth.auth.signInWithPopup(provider);
+    const credential = await this.angularFireAuth.auth.signInWithPopup(provider);
     return this.updateUserData(credential.user);
   }
 
   private updateUserData({ uid, email, displayName, photoURL }) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${uid}`);
+    const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(`users/${uid}`);
 
     const data = {
       uid,
@@ -72,7 +72,7 @@ export class AuthService {
   }
 
   async signOut() {
-    await this.afAuth.auth.signOut();
+    await this.angularFireAuth.auth.signOut();
     return this.router.navigate(['/']);
   }
 }

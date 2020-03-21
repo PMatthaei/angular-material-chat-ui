@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from './services/auth.service';
-import { ChatService } from './services/chat.service';
+import { FirebaseAuthService } from './services/firebase/firebase-auth.service';
+import { FirebaseChatService } from './services/firebase/firebase-chat.service';
 
 @Component({
   selector: 'app-root',
@@ -8,5 +8,5 @@ import { ChatService } from './services/chat.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  constructor(public auth: AuthService, public cs: ChatService) {}
+  constructor(public auth: FirebaseAuthService, public cs: FirebaseChatService) {}
 }

@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Message, User } from '../chat.component';
+import { Message } from '../../model/message';
+import { User } from '../../model/User';
 import * as moment from 'moment';
 
 @Component({
@@ -11,12 +12,13 @@ export class ChatMessageComponent implements OnInit {
   @Input() msg: Message;
   @Input() predecessor: Message;
   @Input() user: User;
+  @Input() allowsReply = false;
 
   constructor() {}
 
   ngOnInit() {}
 
-  getDateDivider(msg) {
+  getDateDivider(msg): string {
     if (!msg.createdAt) {
       return null;
     }
@@ -29,14 +31,14 @@ export class ChatMessageComponent implements OnInit {
     });
   }
 
-  getUserName(user) {
+  getUserName(user): string {
     if (!user) {
       return null;
     }
     return user.realName ? user.realName : user.displayName;
   }
 
-  getCreatedDate(msg) {
+  getCreatedDate(msg): string {
     if (!msg.createdAt) {
       return null;
     }
@@ -45,7 +47,7 @@ export class ChatMessageComponent implements OnInit {
 
   isNotTemporalClose() {
     if (!this.predecessor) {
-      return false;
+      return true;
     }
     const duration = moment.duration(
       moment(this.msg.createdAt).diff(moment(this.predecessor.createdAt))
@@ -61,4 +63,5 @@ export class ChatMessageComponent implements OnInit {
     const date = new Date(this.msg.createdAt).getDay();
     return prevDate !== date;
   }
+
 }

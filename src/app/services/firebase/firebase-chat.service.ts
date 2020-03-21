@@ -1,29 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthService } from './auth.service';
+import { FirebaseAuthService } from './firebase-auth.service';
 import { Router } from '@angular/router';
 import { firestore } from 'firebase/app';
 import { map, tap, switchMap, flatMap } from 'rxjs/operators';
 import { Observable, combineLatest, of, merge } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from '../chat/chat.component';
-const dummyUser = {
-  displayName: 'Anonymous'
-};
+import { User } from '../../model/User';
+import { ChatBaseService } from '../chat-base.service';
+import { Message } from '../../model/message';
+import { Chat } from '../../model/chat';
+import { ServicesConfig } from '../services-config';
+
 @Injectable({
   providedIn: 'root'
 })
-export class ChatService {
-  $test: any;
+export class FirebaseChatService extends ChatBaseService {
   userDictionary = {};
 
   constructor(
     private afs: AngularFirestore,
-    private auth: AuthService,
-    private router: Router
-  ) {}
+    private auth: FirebaseAuthService,
+    private router: Router,
+    @Optional() config?: ServicesConfig,
+  ) {
+    super(config);
+  }
 
-  get(chatId: string) {
+  getHistory(chatId: string): Observable<any> {
     return this.afs
       .collection<any>('chats')
       .doc(chatId)
@@ -36,7 +40,7 @@ export class ChatService {
       );
   }
 
-  getUserChats() {
+  getParticipatingChats() {
     return this.auth.user$.pipe(
       switchMap(user => {
         const participatingChats = this.afs
@@ -49,9 +53,10 @@ export class ChatService {
           .snapshotChanges();
         return combineLatest(participatingChats, ownedChats).pipe(
           // tslint:disable-next-line:no-shadowed-variable
-          map(([participatingChats, ownedChats]) => {
-            return [...participatingChats, ...ownedChats];
-          }),
+          map(([participatingChats, ownedChats]) => [
+            ...participatingChats,
+            ...ownedChats
+          ]),
           map(actions => {
             return actions.map(a => {
               const chatData: any = a.payload.doc.data();
@@ -64,7 +69,7 @@ export class ChatService {
     );
   }
 
-  async create() {
+  async create(): Promise<boolean> {
     // Fetch user and wait for result
     const { uid } = await this.auth.getUser();
 
@@ -85,7 +90,7 @@ export class ChatService {
     return this.router.navigate(['chats', docRef.id]);
   }
 
-  async sendIsTyping(chatId: string) {
+  async sendIsTyping(chatId: string): Promise<void> {
     const { uid } = await this.auth.getUser();
 
     if (uid) {
@@ -96,7 +101,7 @@ export class ChatService {
     }
   }
 
-  async deleteIsTyping(chatId: string) {
+  async deleteIsTyping(chatId: string): Promise<void> {
     const { uid } = await this.auth.getUser();
 
     if (uid) {
@@ -107,7 +112,7 @@ export class ChatService {
     }
   }
 
-  async sendMessage(chatId: string, content: string) {
+  async sendMessage(chatId: string, content: string): Promise<void> {
     const { uid } = await this.auth.getUser();
 
     const data = {
@@ -124,7 +129,7 @@ export class ChatService {
     }
   }
 
-  async deleteMessage(chat: any, msg: any) {
+  async deleteMessage(chat: Chat, msg: Message) {
     const { uid } = await this.auth.getUser();
 
     const ref = this.afs.collection('chats').doc(chat.id);

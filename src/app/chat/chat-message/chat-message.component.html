@@ -60,6 +60,7 @@
       </mat-card>
 
       <button
+        *ngIf="allowsReply"
         [ngStyle]="{
           'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
           'margin-bottom': '8px',
@@ -78,13 +79,9 @@
           'justify-content': msg.uid !== user.uid ? 'flex-end' : 'flex-start'
         }"
       >
-        <mat-chip>
+        <mat-chip *ngFor="let attachment of msg.attachments">
           <mat-icon>insert_drive_file</mat-icon>
-          Testfile1laaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaang.pdf
-        </mat-chip>
-        <mat-chip>
-          <mat-icon>insert_drive_file</mat-icon>
-          Testfile1.pdf
+          {{ attachment.name }}
         </mat-chip>
       </mat-chip-list>
     </mat-card-content>

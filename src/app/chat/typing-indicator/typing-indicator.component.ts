@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User } from '../chat.component';
-import { ChatService } from '../../services/chat.service';
+import { FirebaseChatService } from '../../services/firebase/firebase-chat.service';
+import { User } from '../../model/User';
 
 @Component({
   selector: 'app-typing-indicator',
@@ -11,7 +11,7 @@ export class TypingIndicatorComponent implements OnInit {
   @Input() user: User;
   @Input() typing: string[];
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: FirebaseChatService) {}
 
   ngOnInit() {}
 
