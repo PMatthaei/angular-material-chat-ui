@@ -47,7 +47,7 @@ export class ChatMessageComponent implements OnInit {
 
   isNotTemporalClose() {
     if (!this.predecessor) {
-      return false;
+      return true;
     }
     const duration = moment.duration(
       moment(this.msg.createdAt).diff(moment(this.predecessor.createdAt))
