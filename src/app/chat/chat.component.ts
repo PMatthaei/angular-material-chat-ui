@@ -27,6 +27,8 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     const chatId = this.route.snapshot.paramMap.get('id');
+    // TODO: first load already existing history
+    // TODO: listen on changes
     const source = this.chatService.getHistory(chatId);
     this.chat$ = this.chatService.buildChat(source).pipe(
       tap(res => this.integrateNewMessages(res)),

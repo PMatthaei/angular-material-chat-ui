@@ -31,11 +31,8 @@
         *ngIf="isNotTemporalClose()"
         style="font-size: 16px; margin-bottom: 6px;"
       >
-        {{ getUserName(msg.user) }}</mat-card-title
-      >
-      <mat-card-subtitle style="margin-bottom: 4px;">{{
-        getCreatedDate(msg)
-      }}</mat-card-subtitle>
+        {{ getUserName(msg.user) }}
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content
       style="display: inline-flex; flex-direction: column; width: 100%;"
@@ -56,6 +53,9 @@
           padding: '12px'
         }"
       >
+        <div style="top: 2px;position: absolute;right: 4px; font-size: 12px; opacity: 0.6">
+          {{ getCreatedDate(msg) }}
+        </div>
         <span style="overflow-wrap: break-word;">{{ msg.content }}</span>
       </mat-card>
 
