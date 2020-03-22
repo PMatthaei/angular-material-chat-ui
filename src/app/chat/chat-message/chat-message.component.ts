@@ -40,14 +40,22 @@ export class ChatMessageComponent implements OnInit {
     return msg.createdAt.format('LT');
   }
 
-  isNotTemporalClose() {
+  isPredecessorSameAuthor(): boolean {
+    if (!this.predecessor) {
+      return false;
+    }
+    return this.predecessor.uid === this.msg.uid;
+  }
+
+  isTemporalClose(): boolean {
     if (!this.predecessor) {
       return true;
     }
+
     const duration = moment.duration(
       this.msg.createdAt.diff(this.predecessor.createdAt)
     );
-    return duration.asMinutes() > 1;
+    return duration.asMinutes() <= 1;
   }
 
   isPreviousMessageFromOtherDay() {

@@ -10,7 +10,9 @@
   <mat-card
     style="box-shadow: none; background-color: transparent;"
     [ngStyle]="{
-      'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start'
+      'align-self': msg.uid !== user.uid ? 'flex-end' : 'flex-start',
+      'padding-top': !(isPredecessorSameAuthor() && isTemporalClose()) ? '16px' : '0px',
+      'padding-bottom': !(isPredecessorSameAuthor() && isTemporalClose()) ? '16px' : '0px'
     }"
   >
     <!-- Message Header -->
@@ -22,13 +24,13 @@
       }"
     >
       <img
-        *ngIf="isNotTemporalClose()"
+        *ngIf="!(isPredecessorSameAuthor() && isTemporalClose())"
         mat-card-avatar
         [src]="msg.user?.photoUrl || 'assets/account.png'"
         width="50px"
       />
       <mat-card-title
-        *ngIf="isNotTemporalClose()"
+        *ngIf="!(isPredecessorSameAuthor() && isTemporalClose())"
         style="font-size: 16px; margin-bottom: 6px;"
       >
         {{ getUserName(msg.user) }}
@@ -50,7 +52,7 @@
           'min-width': '150px',
           'max-width': '100%',
           'margin-bottom': '8px',
-          padding: '12px'
+          padding: '16px 12px 12px 12px'
         }"
       >
         <div style="top: 2px;position: absolute;right: 4px; font-size: 12px; opacity: 0.6">

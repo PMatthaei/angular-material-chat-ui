@@ -24,7 +24,7 @@ export class FirebaseChatService extends ChatBaseService {
     private afs: AngularFirestore,
     private auth: FirebaseAuthService,
     private router: Router,
-    @Optional() config?: ServicesConfig,
+    @Optional() config?: ServicesConfig
   ) {
     super(config);
   }
@@ -112,7 +112,7 @@ export class FirebaseChatService extends ChatBaseService {
     const data = {
       uid,
       content,
-      createdAt: firebase.firestore.Timestamp.now(),
+      createdAt: firebase.firestore.Timestamp.now()
     };
 
     if (uid) {
@@ -152,7 +152,11 @@ export class FirebaseChatService extends ChatBaseService {
         this.buildUserDictionary(users);
         // Augment message data with newly fetched user data
         chat.messages = chat.messages.map((message: any) => {
-          return { ...message, createdAt: moment(message.createdAt.toDate()), user: this.userDictionary[message.uid] };
+          return {
+            ...message,
+            createdAt: moment(message.createdAt.toDate()),
+            user: this.userDictionary[message.uid]
+          };
         });
         return chat;
       })
@@ -164,19 +168,7 @@ export class FirebaseChatService extends ChatBaseService {
   }
 
   private fetchUsers(uids: unknown[]): Observable<any>[] {
-    return uids.map(uid => {
-      const publicUserData = this.afs.doc(`users/${uid}`).valueChanges();
-      const secureUserData = this.afs
-        .doc(`users/${uid}`)
-        .collection('secureData')
-        .valueChanges()
-        .pipe(catchError(err => of({})));
-      return combineLatest(publicUserData, secureUserData).pipe(
-        map(([publicData, secureData]) => {
-          return { ...(publicData as {}), ...secureData[0] };
-        })
-      );
-    });
+    return uids.map(uid => this.afs.doc(`users/${uid}`).valueChanges());
   }
 
   getUserById(typerId) {
